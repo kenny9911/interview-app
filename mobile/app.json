@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "viva",
+    "slug": "viva",
+    "scheme": "viva",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.viva.interview",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "viva uses your microphone so the AI interviewer can hear and respond to your answers.",
+        "NSCameraUsageDescription": "viva uses your camera so you can see yourself during the interview (optional — you can keep it off).",
+        "UIBackgroundModes": ["audio", "voip"]
+      }
+    },
+    "android": {
+      "package": "com.viva.interview",
+      "permissions": ["RECORD_AUDIO", "CAMERA", "MODIFY_AUDIO_SETTINGS"],
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-font",
+      [
+        "@livekit/react-native-expo-plugin",
+        { "android": { "audioType": "communication" } }
+      ],
+      "@config-plugins/react-native-webrtc"
+    ]
+  }
+}
