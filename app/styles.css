@@ -1,0 +1,202 @@
+/* ============================================================
+   viva — AI Video Interview App
+   Art direction "Atelier": warm bone paper, plum ink, persimmon hero.
+   Type: Bricolage Grotesque (display) + Hanken Grotesk (text).
+   This stylesheet holds the design tokens, the iOS device frame
+   (ported from ios-frame.jsx), shared component classes, the gallery
+   canvas, and the interactive-prototype layout. Per-screen specifics
+   stay inline in index.html to keep the mockups pixel-faithful.
+   ============================================================ */
+
+:root {
+  /* palette */
+  --bone:        #F4EFE4;
+  --bone-canvas: #e7e5df;
+  --sand:        #E7C8A0;
+  --plum:        #2E2142;
+  --plum-2:      #3A2952;
+  --plum-3:      #241634;
+  --ink:         #1F1A17;
+  --persimmon:   #FF5836;
+  --persimmon-d: #D8401C;
+  --persimmon-l: #FF8A5C;
+  --muted:       #8B8576;
+  --muted-2:     #6c685c;
+  --hairline:    #E7E0D0;
+
+  --display: 'Bricolage Grotesque', -apple-system, system-ui, sans-serif;
+  --text:    'Hanken Grotesk', -apple-system, system-ui, sans-serif;
+
+  --device-w: 402px;
+  --device-h: 874px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: var(--text);
+  color: var(--ink);
+  background: var(--bone-canvas);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ----------------------------------------------------------------
+   Keyframes (from the source design)
+   ---------------------------------------------------------------- */
+@keyframes orbBreathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes glowPulse  { 0%,100% { opacity: .5; transform: scale(.95); } 50% { opacity: 1; transform: scale(1.06); } }
+@keyframes ringPulse  { 0% { transform: scale(.92); opacity: .55; } 80% { opacity: 0; } 100% { transform: scale(1.75); opacity: 0; } }
+@keyframes bar        { 0%,100% { transform: scaleY(.3); } 50% { transform: scaleY(1); } }
+@keyframes floatChip  { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+
+/* ----------------------------------------------------------------
+   Top toolbar
+   ---------------------------------------------------------------- */
+.toolbar {
+  position: sticky; top: 0; z-index: 200;
+  display: flex; align-items: center; gap: 18px;
+  padding: 14px 24px;
+  background: rgba(231,229,223,.82);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(31,26,23,.08);
+}
+.toolbar .brand { display: flex; align-items: center; gap: 9px; }
+.toolbar .brand .mark {
+  width: 30px; height: 30px; border-radius: 9px; background: var(--persimmon);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-family: var(--display); font-weight: 700; font-size: 16px;
+}
+.toolbar .brand .name { font-family: var(--display); font-weight: 700; font-size: 17px; letter-spacing: -.01em; }
+.toolbar .tag { font-size: 12px; color: var(--muted-2); font-weight: 600; letter-spacing: .04em; }
+.toolbar .spacer { flex: 1; }
+
+.seg {
+  display: inline-flex; background: #fff; border: 1px solid var(--hairline);
+  border-radius: 11px; padding: 3px; font-size: 13px; font-weight: 600;
+}
+.seg button {
+  border: 0; background: transparent; color: var(--muted);
+  padding: 7px 15px; border-radius: 8px; cursor: pointer;
+  font-family: var(--text); font-weight: 600; font-size: 13px;
+}
+.seg button.active { background: var(--ink); color: #fff; }
+
+.proto-controls { display: none; align-items: center; gap: 10px; }
+body.view-prototype .proto-controls { display: flex; }
+.proto-controls select {
+  font-family: var(--text); font-size: 13px; font-weight: 600; color: var(--ink);
+  background: #fff; border: 1px solid var(--hairline); border-radius: 10px;
+  padding: 8px 12px; cursor: pointer;
+}
+.nav-btn {
+  width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--hairline);
+  background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  color: var(--ink);
+}
+.nav-btn:disabled { opacity: .35; cursor: default; }
+
+/* ----------------------------------------------------------------
+   Canvas + gallery layout
+   ---------------------------------------------------------------- */
+.canvas { padding: 40px 48px 80px; }
+
+.intro { max-width: 820px; margin-bottom: 46px; }
+.intro .eyebrow { font: 700 12px var(--text); letter-spacing: .16em; color: var(--persimmon-d); margin-bottom: 14px; }
+.intro h1 { font-family: var(--display); font-weight: 700; font-size: 42px; line-height: 1.04; letter-spacing: -.015em; margin: 0 0 16px; }
+.intro p { font-size: 16px; line-height: 1.55; color: var(--muted-2); max-width: 720px; margin: 0; }
+.intro b { color: var(--ink); }
+.intro b.persimmon { color: var(--persimmon-d); }
+.swatches { display: flex; gap: 9px; margin-top: 20px; }
+.swatch {
+  display: flex; align-items: center; gap: 8px; background: #fff;
+  border: 1px solid var(--hairline); border-radius: 999px; padding: 6px 13px;
+  font-size: 12.5px; font-weight: 600;
+}
+.swatch i { width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--hairline); }
+
+.section-title { font-family: var(--display); font-weight: 700; font-size: 19px; margin-bottom: 6px; }
+.section-sub { font-size: 13px; color: #7a786c; margin-bottom: 22px; }
+.row { display: flex; gap: 40px; align-items: flex-start; margin-bottom: 76px; flex-wrap: wrap; }
+.cell { display: flex; flex-direction: column; gap: 12px; }
+.cell > .label { font: 600 13px var(--text); color: #6b6a60; }
+
+/* ----------------------------------------------------------------
+   iOS device frame (ported from ios-frame.jsx)
+   ---------------------------------------------------------------- */
+.device {
+  width: var(--device-w); height: var(--device-h);
+  border-radius: 48px; overflow: hidden; position: relative;
+  background: #F2F2F7;
+  box-shadow: 0 40px 80px rgba(0,0,0,.18), 0 0 0 1px rgba(0,0,0,.12);
+  font-family: var(--text);
+  flex: none;
+}
+.device.dark { background: #000; }
+
+/* clickable in gallery to open the prototype */
+body.view-gallery .device { cursor: zoom-in; }
+
+.device .island {
+  position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
+  width: 126px; height: 37px; border-radius: 24px; background: #000; z-index: 50;
+}
+
+.statusbar {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 40;
+  display: flex; align-items: center; padding: 21px 24px 19px;
+}
+.statusbar .time {
+  flex: 1; text-align: left; padding-left: 6px;
+  font-family: -apple-system, 'SF Pro', system-ui; font-weight: 590;
+  font-size: 17px; line-height: 22px; color: #000;
+}
+.statusbar .glyphs { flex: 1; display: flex; align-items: center; justify-content: flex-end; gap: 7px; padding-right: 2px; }
+.device.dark .statusbar .time { color: #fff; }
+
+.device-content {
+  position: absolute; inset: 0; overflow-y: auto; border-radius: 48px;
+  -ms-overflow-style: none; scrollbar-width: none;
+}
+.device-content::-webkit-scrollbar { display: none; }
+.device-content > .screen { min-height: var(--device-h); }
+
+.home-indicator {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 60; height: 34px;
+  display: flex; justify-content: center; align-items: flex-end; padding-bottom: 8px;
+  pointer-events: none;
+}
+.home-indicator i { width: 139px; height: 5px; border-radius: 100px; background: rgba(0,0,0,.25); display: block; }
+.device.dark .home-indicator i { background: rgba(255,255,255,.7); }
+
+/* primary persimmon CTA helper (used by some inline buttons via class) */
+.cta {
+  background: var(--persimmon); color: #fff; text-align: center;
+  font-weight: 700; border-radius: 18px;
+  box-shadow: 0 8px 20px rgba(255,88,54,.3);
+}
+
+/* anything wired for navigation should feel tappable in prototype mode */
+body.view-prototype [data-goto] { cursor: pointer; }
+body.view-prototype [data-goto]:active { filter: brightness(.96); }
+
+/* ----------------------------------------------------------------
+   Prototype mode — show one centered device, hide gallery chrome
+   ---------------------------------------------------------------- */
+body.view-prototype .intro,
+body.view-prototype .section-title,
+body.view-prototype .section-sub,
+body.view-prototype .cell > .label { display: none; }
+
+body.view-prototype .canvas {
+  padding: 36px 24px 60px;
+  display: flex; justify-content: center; align-items: flex-start;
+}
+body.view-prototype .row { display: contents; }
+body.view-prototype .cell { display: none; }
+body.view-prototype .cell.is-active { display: block; }
+body.view-prototype .cell.is-active .device { box-shadow: 0 30px 70px rgba(46,33,66,.28), 0 0 0 1px rgba(0,0,0,.12); }
+
+@media (max-width: 560px) {
+  .canvas { padding: 24px 16px 60px; }
+  :root { --device-w: 360px; --device-h: 782px; }
+}

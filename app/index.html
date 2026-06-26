@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>viva — AI Video Interview App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="view-gallery">
+
+<!-- ============================= TOOLBAR ============================= -->
+<header class="toolbar">
+  <div class="brand">
+    <div class="mark">v</div>
+    <div class="name">viva</div>
+  </div>
+  <div class="tag">AI VIDEO INTERVIEW · iOS · ATELIER</div>
+  <div class="spacer"></div>
+  <div class="proto-controls">
+    <button class="nav-btn" id="prevBtn" title="Previous screen">
+      <svg width="11" height="18" viewBox="0 0 12 20" fill="none"><path d="M10 2L2 10l8 8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <select id="screenSelect" aria-label="Jump to screen"></select>
+    <button class="nav-btn" id="nextBtn" title="Next screen">
+      <svg width="11" height="18" viewBox="0 0 12 20" fill="none"><path d="M2 2l8 8-8 8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+  <div class="seg" id="viewSeg">
+    <button data-view="gallery" class="active">Gallery</button>
+    <button data-view="prototype">Prototype</button>
+  </div>
+</header>
+
+<main class="canvas">
+
+  <!-- INTRO -->
+  <div class="intro">
+    <div class="eyebrow">AI VIDEO INTERVIEW APP · iOS · v2</div>
+    <h1>Practice, prove, and learn — by talking to AI.</h1>
+    <p>New art direction <b>“Atelier”</b> — warm bone paper, a deep aubergine-plum ink, and a single <b class="persimmon">electric persimmon</b> as the hero. Warm, fashion-forward and friendly for a younger, non-technical audience — never cold or corporate. Type pairs <b>Bricolage Grotesque</b> (display) with <b>Hanken Grotesk</b> (text). Below: onboarding &amp; auth, the full core flow, pricing &amp; payment, then the live screen in two more moods. <b>Switch to Prototype</b> to click through the flow.</p>
+    <div class="swatches">
+      <div class="swatch"><i style="background:#F4EFE4"></i>Bone</div>
+      <div class="swatch"><i style="background:#2E2142"></i>Plum ink</div>
+      <div class="swatch"><i style="background:#FF5836"></i>Persimmon</div>
+      <div class="swatch"><i style="background:#E7C8A0"></i>Sand</div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 1 · ONBOARDING & AUTH                                -->
+  <!-- ============================================================ -->
+  <div class="section-title">Onboarding &amp; sign in</div>
+  <div class="section-sub">Welcome → sign in or create account · email/password, Apple, Google</div>
+
+  <div class="row">
+
+    <!-- WELCOME -->
+    <div class="cell" data-id="welcome">
+      <div class="label">Welcome</div>
+      <div class="device dark" data-screen="welcome">
+        <div class="device-content"><div class="screen" style="display:flex;flex-direction:column;background:radial-gradient(125% 75% at 50% 12%,#3A2952,#241634 55%,#170E26);color:#fff;font-family:'Hanken Grotesk',system-ui;position:relative;overflow:hidden">
+          <div style="position:absolute;left:50%;top:150px;transform:translateX(-50%);width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(255,88,54,.4),transparent 62%);filter:blur(8px)"></div>
+          <div style="padding:74px 30px 0;position:relative">
+            <div style="display:flex;align-items:center;gap:9px">
+              <div style="width:34px;height:34px;border-radius:10px;background:#FF5836;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Bricolage Grotesque';font-weight:700;font-size:18px">v</div>
+              <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:18px;letter-spacing:-.01em">viva</div>
+            </div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative">
+            <div style="position:relative;width:170px;height:170px;display:flex;align-items:center;justify-content:center;margin-bottom:34px">
+              <div style="position:absolute;width:170px;height:170px;border-radius:50%;border:1.5px solid rgba(255,138,92,.4);animation:ringPulse 3.4s ease-out infinite"></div>
+              <div style="width:140px;height:140px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#FFE3CE 0%,#FF8A5C 30%,#FF5836 66%,#9A2D12 100%);box-shadow:0 0 70px rgba(255,88,54,.55),inset 0 -12px 30px rgba(0,0,0,.3),inset 0 10px 22px rgba(255,255,255,.4);animation:orbBreathe 4s ease-in-out infinite"></div>
+            </div>
+            <div style="text-align:center;padding:0 34px">
+              <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:32px;line-height:1.08;letter-spacing:-.01em">Your AI interview<br>coach is ready.</div>
+              <div style="font-size:15px;line-height:1.5;color:rgba(255,255,255,.72);margin-top:14px">Real interviews, mock rounds, skill drills and expert sessions — voice-first, in your language.</div>
+            </div>
+          </div>
+          <div style="padding:0 26px 38px;position:relative">
+            <div data-goto="signup" style="background:#FF5836;color:#fff;text-align:center;font-weight:700;font-size:16.5px;padding:17px;border-radius:18px;box-shadow:0 10px 26px rgba(255,88,54,.4)">Get started</div>
+            <div style="text-align:center;margin-top:16px;font-size:14.5px;color:rgba(255,255,255,.7)">Already have an account?&nbsp;<b data-goto="signin" style="color:#fff">Sign in</b></div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- SIGN IN -->
+    <div class="cell" data-id="signin">
+      <div class="label">Sign in</div>
+      <div class="device" data-screen="signin">
+        <div class="device-content"><div class="screen" style="display:flex;flex-direction:column;background:#F4EFE4;color:#1F1A17;font-family:'Hanken Grotesk',system-ui">
+          <div style="padding:58px 26px 0">
+            <div data-goto="welcome" style="width:38px;height:38px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid #E7E0D0">
+              <svg width="11" height="18" viewBox="0 0 12 20" fill="none"><path d="M10 2L2 10l8 8" stroke="#1F1A17" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div style="padding:26px 26px 0">
+            <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:30px;letter-spacing:-.01em;line-height:1.1">Welcome back</div>
+            <div style="font-size:15px;color:#8B8576;margin-top:6px">Sign in to continue your prep.</div>
+          </div>
+          <div style="padding:26px 26px 0;display:flex;flex-direction:column;gap:13px">
+            <div>
+              <div style="font:700 12px 'Hanken Grotesk';letter-spacing:.08em;color:#8B8576;margin-bottom:8px">EMAIL</div>
+              <div style="background:#fff;border:1px solid #E7E0D0;border-radius:15px;padding:15px 16px;font-size:15px;color:#1F1A17">maya@email.com</div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div style="font:700 12px 'Hanken Grotesk';letter-spacing:.08em;color:#8B8576">PASSWORD</div><div style="font-size:12.5px;font-weight:700;color:#D8401C">Forgot?</div></div>
+              <div style="background:#fff;border:1px solid #E7E0D0;border-radius:15px;padding:15px 16px;font-size:15px;color:#1F1A17;display:flex;align-items:center;justify-content:space-between;letter-spacing:3px">••••••••<svg width="19" viewBox="0 0 24 24" fill="none" style="letter-spacing:0"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke="#8B8576" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="#8B8576" stroke-width="1.8"/></svg></div>
+            </div>
+            <div data-goto="home" style="background:#FF5836;color:#fff;text-align:center;font-weight:700;font-size:16px;padding:16px;border-radius:16px;margin-top:4px;box-shadow:0 8px 20px rgba(255,88,54,.32)">Sign in</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:24px 26px 0">
+            <div style="flex:1;height:1px;background:#E0D8C8"></div><div style="font-size:12.5px;color:#a39d8e;font-weight:600">or continue with</div><div style="flex:1;height:1px;background:#E0D8C8"></div>
+          </div>
+          <div style="padding:18px 26px 0;display:flex;flex-direction:column;gap:11px">
+            <div data-goto="home" style="background:#fff;border:1px solid #E7E0D0;border-radius:15px;padding:14px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:15px;font-weight:600">
+              <svg width="19" height="19" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.5 12.2c0-.7-.1-1.4-.2-2H12v3.9h5.9a5 5 0 0 1-2.2 3.3v2.7h3.5c2-1.9 3.3-4.7 3.3-7.9z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.5-2.7c-1 .7-2.3 1.1-3.8 1.1-2.9 0-5.4-2-6.3-4.6H2v2.8A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.7 14.1a6.6 6.6 0 0 1 0-4.2V7.1H2a11 11 0 0 0 0 9.8z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3 .6 4.2 1.6l3.1-3.1A11 11 0 0 0 2 7.1l3.7 2.8C6.6 7.3 9.1 5.4 12 5.4z"/></svg>
+              Continue with Google
+            </div>
+            <div data-goto="home" style="background:#1F1A17;color:#fff;border-radius:15px;padding:14px;display:flex;align-items:center;justify-content:center;gap:9px;font-size:15px;font-weight:600">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M16.4 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9s-1.8-.8-3-.8c-1.5 0-2.9.9-3.7 2.3-1.6 2.7-.4 6.8 1.1 9 .8 1.1 1.6 2.3 2.8 2.2 1.1 0 1.5-.7 2.9-.7s1.7.7 2.9.7 2-1.1 2.7-2.1c.9-1.2 1.2-2.4 1.3-2.5-.1 0-2.5-1-2.5-3.9zM14.2 5.8c.6-.8 1-1.8.9-2.8-.9 0-2 .6-2.6 1.3-.6.7-1.1 1.7-.9 2.7 1 0 2-.5 2.6-1.2z"/></svg>
+              Continue with Apple
+            </div>
+          </div>
+          <div style="margin-top:auto;text-align:center;padding:22px 26px 36px;font-size:14.5px;color:#8B8576">New here?&nbsp;<b data-goto="signup" style="color:#D8401C">Create account</b></div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- SIGN UP -->
+    <div class="cell" data-id="signup">
+      <div class="label">Create account</div>
+      <div class="device" data-screen="signup">
+        <div class="device-content"><div class="screen" style="display:flex;flex-direction:column;background:#F4EFE4;color:#1F1A17;font-family:'Hanken Grotesk',system-ui">
+          <div style="padding:58px 26px 0">
+            <div data-goto="welcome" style="width:38px;height:38px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid #E7E0D0">
+              <svg width="11" height="18" viewBox="0 0 12 20" fill="none"><path d="M10 2L2 10l8 8" stroke="#1F1A17" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+          <div style="padding:26px 26px 0">
+            <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:30px;letter-spacing:-.01em;line-height:1.1">Create your<br>account</div>
+            <div style="font-size:15px;color:#8B8576;margin-top:6px">Free to start — no card needed.</div>
+          </div>
+          <div style="padding:24px 26px 0;display:flex;flex-direction:column;gap:13px">
+            <div>
+              <div style="font:700 12px 'Hanken Grotesk';letter-spacing:.08em;color:#8B8576;margin-bottom:8px">FULL NAME</div>
+              <div style="background:#fff;border:1px solid #E7E0D0;border-radius:15px;padding:15px 16px;font-size:15px">Maya Chen</div>
+            </div>
+            <div>
+              <div style="font:700 12px 'Hanken Grotesk';letter-spacing:.08em;color:#8B8576;margin-bottom:8px">EMAIL</div>
+              <div style="background:#fff;border:1px solid #E7E0D0;border-radius:15px;padding:15px 16px;font-size:15px">maya@email.com</div>
+            </div>
+            <div>
+              <div style="font:700 12px 'Hanken Grotesk';letter-spacing:.08em;color:#8B8576;margin-bottom:8px">PASSWORD</div>
+              <div style="background:#fff;border:1px solid #E7E0D0;border-radius:15px;padding:15px 16px;font-size:15px;display:flex;align-items:center;justify-content:space-between;letter-spacing:3px">••••••••<svg width="19" viewBox="0 0 24 24" fill="none" style="letter-spacing:0"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke="#8B8576" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="#8B8576" stroke-width="1.8"/></svg></div>
+              <div style="display:flex;gap:5px;margin-top:9px"><div style="flex:1;height:4px;border-radius:2px;background:#FF5836"></div><div style="flex:1;height:4px;border-radius:2px;background:#FF5836"></div><div style="flex:1;height:4px;border-radius:2px;background:#E7C8A0"></div><div style="flex:1;height:4px;border-radius:2px;background:#E0D8C8"></div></div>
+            </div>
+            <div data-goto="home" style="background:#FF5836;color:#fff;text-align:center;font-weight:700;font-size:16px;padding:16px;border-radius:16px;margin-top:4px;box-shadow:0 8px 20px rgba(255,88,54,.32)">Create account</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:22px 26px 0">
+            <div style="flex:1;height:1px;background:#E0D8C8"></div><div style="font-size:12.5px;color:#a39d8e;font-weight:600">or sign up with</div><div style="flex:1;height:1px;background:#E0D8C8"></div>
+          </div>
+          <div style="padding:16px 26px 0;display:flex;gap:11px">
+            <div data-goto="home" style="flex:1;background:#fff;border:1px solid #E7E0D0;border-radius:15px;padding:14px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14.5px;font-weight:600">
+              <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.5 12.2c0-.7-.1-1.4-.2-2H12v3.9h5.9a5 5 0 0 1-2.2 3.3v2.7h3.5c2-1.9 3.3-4.7 3.3-7.9z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.5-2.7c-1 .7-2.3 1.1-3.8 1.1-2.9 0-5.4-2-6.3-4.6H2v2.8A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.7 14.1a6.6 6.6 0 0 1 0-4.2V7.1H2a11 11 0 0 0 0 9.8z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3 .6 4.2 1.6l3.1-3.1A11 11 0 0 0 2 7.1l3.7 2.8C6.6 7.3 9.1 5.4 12 5.4z"/></svg>Google
+            </div>
+            <div data-goto="home" style="flex:1;background:#1F1A17;color:#fff;border-radius:15px;padding:14px;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14.5px;font-weight:600">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="#fff"><path d="M16.4 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9s-1.8-.8-3-.8c-1.5 0-2.9.9-3.7 2.3-1.6 2.7-.4 6.8 1.1 9 .8 1.1 1.6 2.3 2.8 2.2 1.1 0 1.5-.7 2.9-.7s1.7.7 2.9.7 2-1.1 2.7-2.1c.9-1.2 1.2-2.4 1.3-2.5-.1 0-2.5-1-2.5-3.9zM14.2 5.8c.6-.8 1-1.8.9-2.8-.9 0-2 .6-2.6 1.3-.6.7-1.1 1.7-.9 2.7 1 0 2-.5 2.6-1.2z"/></svg>Apple
+            </div>
+          </div>
+          <div style="margin-top:auto;text-align:center;padding:22px 26px 36px;font-size:12.5px;color:#a39d8e;line-height:1.5">By continuing you agree to our<br><b style="color:#8B8576">Terms</b> &amp; <b style="color:#8B8576">Privacy Policy</b></div>
+        </div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 2 · CORE FLOW                                        -->
+  <!-- ============================================================ -->
+  <div class="section-title">The core flow</div>
+  <div class="section-sub">Home → choose a mode → set up → live AI interview → results</div>
+
+  <div class="row">
+
+    <!-- HOME -->
+    <div class="cell" data-id="home">
+      <div class="label">Home</div>
+      <div class="device" data-screen="home">
+        <div class="device-content"><div class="screen" style="display:flex;flex-direction:column;background:#F4EFE4;color:#1F1A17;font-family:'Hanken Grotesk',system-ui">
+          <div style="padding:60px 22px 0">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between">
+              <div>
+                <div style="font-size:13px;color:#8B8576;margin-bottom:3px">Tuesday, 23 June</div>
+                <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:27px;letter-spacing:-.01em">Hi, Maya</div>
+              </div>
+              <div style="width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FF8A5C,#D8401C);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:17px">M</div>
+            </div>
+          </div>
+          <div data-goto="setup" style="margin:20px 22px 0;border-radius:26px;background:linear-gradient(155deg,#3A2952,#221534);padding:20px;color:#fff;position:relative;overflow:hidden">
+            <div style="position:absolute;right:-30px;top:-30px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(255,88,54,.32),transparent 70%)"></div>
+            <div style="font:700 11px 'Hanken Grotesk';letter-spacing:.13em;color:#FF8A5C;margin-bottom:14px">UP NEXT · REAL INTERVIEW</div>
+            <div style="display:flex;align-items:center;gap:13px;margin-bottom:16px">
+              <div style="width:46px;height:46px;border-radius:13px;background:#F4EFE4;display:flex;align-items:center;justify-content:center;color:#3A2952;font-family:'Bricolage Grotesque';font-weight:700;font-size:20px;flex:none">N</div>
+              <div>
+                <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:18px">Product Designer</div>
+                <div style="font-size:13px;color:rgba(255,255,255,.7)">Northwind · Final round</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="display:flex;align-items:center;gap:7px;font-size:13.5px;color:rgba(255,255,255,.85)">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                Today, 4:00 PM
+              </div>
+              <div style="background:#FF5836;color:#fff;font-weight:700;font-size:14px;padding:9px 20px;border-radius:999px">Join</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin:26px 22px 14px">
+            <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:18px">Start practicing</div>
+            <div data-goto="choosemode" style="font-size:13px;font-weight:600;color:#D8401C">See all</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px;padding:0 22px">
+            <div data-goto="choosemode" style="background:#fff;border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:128px">
+              <div style="width:40px;height:40px;border-radius:12px;background:#FBE3DA;color:#D8401C;display:flex;align-items:center;justify-content:center">
+                <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M10.5 8.5l5 3.5-5 3.5z" fill="currentColor"/></svg>
+              </div>
+              <div style="margin-top:auto"><div style="font-weight:700;font-size:15.5px">Mock interview</div><div style="font-size:12px;color:#8B8576;line-height:1.3;margin-top:2px">Full scored round</div></div>
+            </div>
+            <div data-goto="choosemode" style="background:#fff;border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:128px">
+              <div style="width:40px;height:40px;border-radius:12px;background:#ECE6F6;color:#6E5AA8;display:flex;align-items:center;justify-content:center">
+                <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.6 1 1.3 1 2.5h6c0-1.2.3-1.9 1-2.5A6 6 0 0 0 12 3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              </div>
+              <div style="margin-top:auto"><div style="font-weight:700;font-size:15.5px">Topic practice</div><div style="font-size:12px;color:#8B8576;line-height:1.3;margin-top:2px">Drill a skill</div></div>
+            </div>
+            <div data-goto="choosemode" style="background:#fff;border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:128px">
+              <div style="width:40px;height:40px;border-radius:12px;background:#EFE7DA;color:#A8742B;display:flex;align-items:center;justify-content:center">
+                <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M5 19V11M12 19V5M19 19v-7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+              </div>
+              <div style="margin-top:auto"><div style="font-weight:700;font-size:15.5px">Capability test</div><div style="font-size:12px;color:#8B8576;line-height:1.3;margin-top:2px">From your employer</div></div>
+            </div>
+            <div data-goto="choosemode" style="background:#fff;border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:128px">
+              <div style="width:40px;height:40px;border-radius:12px;background:#FBE3DA;color:#D8401C;display:flex;align-items:center;justify-content:center">
+                <svg width="21" height="21" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-4 9 4-9 4-9-4zM7 11v4c0 1.1 2.2 2.4 5 2.4s5-1.3 5-2.4v-4" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              </div>
+              <div style="margin-top:auto"><div style="font-weight:700;font-size:15.5px">Expert interview</div><div style="font-size:12px;color:#8B8576;line-height:1.3;margin-top:2px">Extract know-how</div></div>
+            </div>
+          </div>
+          <div style="margin-top:auto;display:flex;justify-content:space-around;align-items:center;padding:12px 18px 30px;background:rgba(244,239,228,.85);backdrop-filter:blur(12px);border-top:1px solid rgba(31,26,23,.07)">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#D8401C">
+              <svg width="23" height="23" viewBox="0 0 24 24" fill="currentColor"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg>
+              <div style="font-size:10.5px;font-weight:700">Home</div>
+            </div>
+            <div data-goto="choosemode" style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#aba593">
+              <svg width="23" height="23" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="2"/></svg>
+              <div style="font-size:10.5px;font-weight:600">Practice</div>
+            </div>
+            <div data-goto="results" style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#aba593">
+              <svg width="23" height="23" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="3" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 3v4M16 3v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <div style="font-size:10.5px;font-weight:600">Interviews</div>
+            </div>
+            <div data-goto="plans" style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#aba593">
+              <svg width="23" height="23" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M5 20a7 7 0 0 1 14 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <div style="font-size:10.5px;font-weight:600">Profile</div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- CHOOSE MODE -->
+    <div class="cell" data-id="choosemode">
+      <div class="label">Choose a mode</div>
+      <div class="device" data-screen="choosemode">
+        <div class="device-content"><div class="screen" style="display:flex;flex-direction:column;background:#F4EFE4;color:#1F1A17;font-family:'Hanken Grotesk',system-ui">
+          <div style="padding:58px 22px 0;display:flex;align-items:center;justify-content:space-between">
+            <div data-goto="home" style="width:38px;height:38px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid #E7E0D0">
+              <svg width="11" height="18" viewBox="0 0 12 20" fill="none"><path d="M10 2L2 10l8 8" stroke="#1F1A17" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div style="display:flex;align-items:center;gap:7px;background:#fff;border:1px solid #E7E0D0;border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#D8401C" stroke-width="2"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18" stroke="#D8401C" stroke-width="1.6"/></svg>
+              English
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5l3-3" stroke="#1F1A17" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+          </div>
+          <div style="padding:22px 22px 8px">
+            <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:28px;letter-spacing:-.01em;line-height:1.1">What do you<br>want to do?</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;padding:10px 22px 0">
+            <div style="background:#fff;border:2px solid #FF5836;border-radius:22px;padding:16px;display:flex;gap:14px;align-items:center">
+              <div style="width:46px;height:46px;border-radius:13px;background:#FBE3DA;color:#D8401C;display:flex;align-items:center;justify-content:center;flex:none">
+                <svg width="23" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M10.5 8.5l5 3.5-5 3.5z" fill="currentColor"/></svg>
+              </div>
+              <div style="flex:1">
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><div style="font-weight:700;font-size:16.5px;white-space:nowrap">Mock interview</div><div style="background:#FBE3DA;color:#D8401C;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px">POPULAR</div></div>
+                <div style="font-size:12.5px;color:#8B8576;line-height:1.35;margin-top:3px">A full practice round, scored like the real thing.</div>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #E7E0D0;border-radius:22px;padding:16px;display:flex;gap:14px;align-items:center">
+              <div style="width:46px;height:46px;border-radius:13px;background:#EFE7DA;color:#A8742B;display:flex;align-items:center;justify-content:center;flex:none">
+                <svg width="23" viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="13" rx="2.5" stroke="currentColor" stroke-width="2"/><path d="M8 7V5.5A2.5 2.5 0 0 1 10.5 3h3A2.5 2.5 0 0 1 16 5.5V7" stroke="currentColor" stroke-width="2"/></svg>
+              </div>
+              <div style="flex:1">
+                <div style="font-weight:700;font-size:16.5px">Real interview</div>
+                <div style="font-size:12.5px;color:#8B8576;line-height:1.35;margin-top:3px">Take a scheduled interview from an employer.</div>
+              </div>
+              <div style="background:#F1EDE2;color:#8B8576;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px">INVITE</div>
+            </div>
+            <div style="background:#fff;border:1px solid #E7E0D0;border-radius:22px;padding:16px;display:flex;gap:14px;align-items:center">
+              <div style="width:46px;height:46px;border-radius:13px;background:#ECE6F6;color:#6E5AA8;display:flex;align-items:center;justify-content:center;flex:none">
+                <svg width="23" viewBox="0 0 24 24" fill="none"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.6 1 1.3 1 2.5h6c0-1.2.3-1.9 1-2.5A6 6 0 0 0 12 3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              </div>
+              <div style="flex:1">
+                <div style="font-weight:700;font-size:16.5px">Topic practice</div>
+                <div style="font-size:12.5px;color:#8B8576;line-height:1.35;margin-top:3px">Drill a specific skill with instant coaching.</div>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #E7E0D0;border-radius:22px;padding:16px;display:flex;gap:14px;align-items:center">
+              <div style="width:46px;height:46px;border-radius:13px;background:#EFE7DA;color:#A8742B;display:flex;align-items:center;justify-content:center;flex:none">
+                <svg width="23" viewBox="0 0 24 24" fill="none"><path d="M5 19V11M12 19V5M19 19v-7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+              </div>
+              <div style="flex:1">
+                <div style="font-weight:700;font-size:16.5px">Capability assessment</div>
+                <div style="font-size:12.5px;color:#8B8576;line-height:1.35;margin-top:3px">Get evaluated by your employer on real skills.</div>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #E7E0D0;border-radius:22px;padding:16px;display:flex;gap:14px;align-items:center">
+              <div style="width:46px;height:46px;border-radius:13px;background:#FBE3DA;color:#D8401C;display:flex;align-items:center;justify-content:center;flex:none">
+                <svg width="23" viewBox="0 0 24 24" fill="none"><path d="M3 9l9-4 9 4-9 4-9-4zM7 11v4c0 1.1 2.2 2.4 5 2.4s5-1.3 5-2.4v-4" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              </div>
+              <div style="flex:1">
+                <div style="font-weight:700;font-size:16.5px">Expert interview</div>
+                <div style="font-size:12.5px;color:#8B8576;line-height:1.35;margin-top:3px">Interview an expert AI to extract know-how.</div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:auto;padding:16px 22px 34px;background:linear-gradient(transparent,#F4EFE4 28%)">
+            <div data-goto="setup" style="background:#FF5836;color:#fff;text-align:center;font-weight:700;font-size:16px;padding:16px;border-radius:18px;box-shadow:0 8px 20px rgba(255,88,54,.3)">Continue with Mock interview</div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- SET UP -->
+    <div class="cell" data-id="setup">
+      <div class="label">Set up</div>
+      <div class="device" data-screen="setup">
+        <div class="device-content"><div class="screen" style="display:flex;flex-direction:column;background:#F4EFE4;color:#1F1A17;font-family:'Hanken Grotesk',system-ui">
+          <div style="padding:58px 22px 0;display:flex;align-items:center;gap:12px">
+            <div data-goto="choosemode" style="width:38px;height:38px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex:none;border:1px solid #E7E0D0">
+              <svg width="11" height="18" viewBox="0 0 12 20" fill="none"><path d="M10 2L2 10l8 8" stroke="#1F1A17" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:21px">Set up your mock</div>
+          </div>
+          <div style="margin:18px 22px 0;border-radius:22px;height:178px;background:linear-gradient(160deg,#3A2952,#1c1228);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center">
+            <svg width="74" height="74" viewBox="0 0 24 24" fill="none" style="opacity:.5"><circle cx="12" cy="9" r="4" stroke="#FF8A5C" stroke-width="1.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0" stroke="#FF8A5C" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <div style="position:absolute;left:14px;top:14px;display:flex;align-items:center;gap:6px;background:rgba(0,0,0,.4);backdrop-filter:blur(6px);padding:5px 11px;border-radius:999px;color:#fff;font-size:12px;font-weight:600"><div style="width:7px;height:7px;border-radius:50%;background:#FF5836"></div>Camera ready</div>
+            <div style="position:absolute;left:14px;bottom:14px;display:flex;align-items:flex-end;gap:3px;height:22px">
+              <div style="width:3px;height:40%;background:#FF8A5C;border-radius:2px"></div><div style="width:3px;height:75%;background:#FF8A5C;border-radius:2px"></div><div style="width:3px;height:55%;background:#FF8A5C;border-radius:2px"></div><div style="width:3px;height:95%;background:#FF8A5C;border-radius:2px"></div><div style="width:3px;height:45%;background:#FF8A5C;border-radius:2px"></div><div style="width:3px;height:70%;background:#FF8A5C;border-radius:2px"></div>
+            </div>
+          </div>
+          <div style="padding:22px 22px 0;display:flex;flex-direction:column;gap:18px">
+            <div>
+              <div style="font:700 12px 'Hanken Grotesk';letter-spacing:.1em;color:#8B8576;margin-bottom:9px">ROLE</div>
+              <div style="background:#fff;border:1px solid #E7E0D0;border-radius:16px;padding:15px 16px;display:flex;align-items:center;justify-content:space-between;font-size:15.5px;font-weight:600">Product Manager<svg width="13" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5l3-3" stroke="#1F1A17" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+            </div>
+            <div>
+              <div style="font:700 12px 'Hanken Grotesk';letter-spacing:.1em;color:#8B8576;margin-bottom:9px">INTERVIEWER STYLE</div>
+              <div style="display:flex;background:#EAE3D4;border-radius:14px;padding:4px;gap:4px">
+                <div style="flex:1;text-align:center;padding:10px;font-size:14px;font-weight:600;color:#8B8576">Friendly</div>
+                <div style="flex:1;text-align:center;padding:10px;font-size:14px;font-weight:700;background:#FF5836;color:#fff;border-radius:11px">Balanced</div>
+                <div style="flex:1;text-align:center;padding:10px;font-size:14px;font-weight:600;color:#8B8576">Tough</div>
+              </div>
+            </div>
+            <div>
+              <div style="font:700 12px 'Hanken Grotesk';letter-spacing:.1em;color:#8B8576;margin-bottom:9px">INTERVIEWER</div>
+              <div style="display:flex;gap:11px">
+                <div style="flex:1;background:#fff;border:2px solid #FF5836;border-radius:16px;padding:13px 8px;text-align:center">
+                  <div style="width:42px;height:42px;border-radius:50%;margin:0 auto 7px;background:radial-gradient(circle at 35% 30%,#FFB48C,#D8401C)"></div>
+                  <div style="font-weight:700;font-size:13.5px">Aria</div><div style="font-size:11px;color:#8B8576">Hiring mgr</div>
+                </div>
+                <div style="flex:1;background:#fff;border:1px solid #E7E0D0;border-radius:16px;padding:13px 8px;text-align:center">
+                  <div style="width:42px;height:42px;border-radius:50%;margin:0 auto 7px;background:radial-gradient(circle at 35% 30%,#C7B6E8,#6E5AA8)"></div>
+                  <div style="font-weight:700;font-size:13.5px">Sam</div><div style="font-size:11px;color:#8B8576">Peer</div>
+                </div>
+                <div style="flex:1;background:#fff;border:1px solid #E7E0D0;border-radius:16px;padding:13px 8px;text-align:center">
+                  <div style="width:42px;height:42px;border-radius:50%;margin:0 auto 7px;background:radial-gradient(circle at 35% 30%,#E7C8A0,#A8742B)"></div>
+                  <div style="font-weight:700;font-size:13.5px">Lena</div><div style="font-size:11px;color:#8B8576">Director</div>
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;gap:14px">
+              <div style="flex:1">
+                <div style="font:700 12px 'Hanken Grotesk';letter-spacing:.1em;color:#8B8576;margin-bottom:9px">LANGUAGE</div>
+                <div style="background:#fff;border:1px solid #E7E0D0;border-radius:16px;padding:15px 16px;display:flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600">
+                  <svg width="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#D8401C" stroke-width="2"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18" stroke="#D8401C" stroke-width="1.5"/></svg>English
+                </div>
+              </div>
+              <div style="flex:1">
+                <div style="font:700 12px 'Hanken Grotesk';letter-spacing:.1em;color:#8B8576;margin-bottom:9px">LENGTH</div>
+                <div style="background:#fff;border:1px solid #E7E0D0;border-radius:16px;padding:15px 16px;display:flex;align-items:center;justify-content:space-between;font-size:14.5px;font-weight:600">30 min<svg width="13" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5l3-3" stroke="#1F1A17" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:auto;padding:18px 22px 34px;background:linear-gradient(transparent,#F4EFE4 30%)">
+            <div data-goto="live" style="background:#FF5836;color:#fff;display:flex;align-items:center;justify-content:center;gap:9px;font-weight:700;font-size:16.5px;padding:17px;border-radius:18px;box-shadow:0 8px 20px rgba(255,88,54,.3)">
+              Start interview
+              <svg width="18" viewBox="0 0 24 24" fill="none"><path d="M5 12h13M13 6l6 6-6 6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- LIVE -->
+    <div class="cell" data-id="live">
+      <div class="label">Live interview</div>
+      <div class="device dark" data-screen="live">
+        <div class="device-content"><div class="screen" style="display:flex;flex-direction:column;background:radial-gradient(120% 80% at 50% 18%,#3A2952,#231635 60%,#160E24);color:#fff;font-family:'Hanken Grotesk',system-ui;position:relative">
+          <div style="padding:58px 18px 0;display:flex;align-items:flex-start;justify-content:space-between">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);padding:7px 13px;border-radius:999px;font-size:13px;font-weight:700"><div style="width:7px;height:7px;border-radius:50%;background:#FF5836"></div>14:52</div>
+              <div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);backdrop-filter:blur(8px);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;color:rgba(255,255,255,.85)">
+                <svg width="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18" stroke="currentColor" stroke-width="1.5"/></svg>EN
+              </div>
+            </div>
+            <div style="width:88px;height:116px;border-radius:18px;background:linear-gradient(160deg,#48395f,#241733);overflow:hidden;position:relative;border:1.5px solid rgba(255,255,255,.15)">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" style="position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);opacity:.45"><circle cx="12" cy="9" r="4" stroke="#fff" stroke-width="1.5"/><path d="M5 20a7 7 0 0 1 14 0" stroke="#fff" stroke-width="1.5"/></svg>
+              <div style="position:absolute;left:7px;bottom:7px;font-size:10.5px;font-weight:600;color:rgba(255,255,255,.8)">You</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:9px;justify-content:center;margin-top:18px;font-size:12px;color:rgba(255,255,255,.6);font-weight:600">Question 3 of 8</div>
+          <div style="display:flex;gap:5px;justify-content:center;margin-top:8px">
+            <div style="width:26px;height:4px;border-radius:2px;background:#FF5836"></div><div style="width:26px;height:4px;border-radius:2px;background:#FF5836"></div><div style="width:26px;height:4px;border-radius:2px;background:#FF5836"></div><div style="width:26px;height:4px;border-radius:2px;background:rgba(255,255,255,.2)"></div><div style="width:26px;height:4px;border-radius:2px;background:rgba(255,255,255,.2)"></div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;margin-top:-8px">
+            <div style="position:relative;width:226px;height:226px;display:flex;align-items:center;justify-content:center">
+              <div style="position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(255,88,54,.4),transparent 62%);filter:blur(6px);animation:glowPulse 3.4s ease-in-out infinite"></div>
+              <div style="position:absolute;width:188px;height:188px;border-radius:50%;border:1.5px solid rgba(255,138,92,.5);animation:ringPulse 3.2s ease-out infinite"></div>
+              <div style="position:absolute;width:188px;height:188px;border-radius:50%;border:1.5px solid rgba(255,138,92,.4);animation:ringPulse 3.2s ease-out infinite;animation-delay:1.6s"></div>
+              <div style="position:relative;width:188px;height:188px;border-radius:50%;background:radial-gradient(circle at 36% 30%,#FFE3CE 0%,#FF8A5C 28%,#FF5836 64%,#8C2810 100%);box-shadow:0 0 70px rgba(255,88,54,.5),inset 0 -14px 34px rgba(0,0,0,.3),inset 0 12px 26px rgba(255,255,255,.4);animation:orbBreathe 4s ease-in-out infinite;display:flex;align-items:center;justify-content:center">
+                <div style="display:flex;align-items:center;gap:5px;height:42px">
+                  <div style="width:5px;height:38%;background:rgba(255,255,255,.9);border-radius:3px;animation:bar 1s ease-in-out infinite"></div>
+                  <div style="width:5px;height:70%;background:rgba(255,255,255,.9);border-radius:3px;animation:bar 1s ease-in-out infinite;animation-delay:.15s"></div>
+                  <div style="width:5px;height:100%;background:rgba(255,255,255,.9);border-radius:3px;animation:bar 1s ease-in-out infinite;animation-delay:.3s"></div>
+                  <div style="width:5px;height:62%;background:rgba(255,255,255,.9);border-radius:3px;animation:bar 1s ease-in-out infinite;animation-delay:.45s"></div>
+                  <div style="width:5px;height:44%;background:rgba(255,255,255,.9);border-radius:3px;animation:bar 1s ease-in-out infinite;animation-delay:.6s"></div>
+                </div>
+              </div>
+            </div>
+            <div style="text-align:center">
+              <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:19px">Aria</div>
+              <div style="font-size:13px;color:#FF8A5C;font-weight:600;margin-top:2px">Speaking…</div>
+            </div>
+          </div>
+          <div style="padding:0 18px 34px;display:flex;flex-direction:column;gap:13px">
+            <div style="background:rgba(0,0,0,.28);backdrop-filter:blur(10px);border-radius:18px;padding:15px 17px;font-size:15px;line-height:1.45;color:rgba(255,255,255,.95)">
+              <span style="color:rgba(255,255,255,.5)">“</span>Tell me about a time you influenced a team without any formal authority.<span style="color:rgba(255,255,255,.5)">”</span>
+            </div>
+            <div style="align-self:center;display:flex;align-items:center;gap:7px;background:rgba(255,138,92,.18);border:1px solid rgba(255,138,92,.4);color:#FFC4A6;font-size:12.5px;font-weight:700;padding:7px 14px;border-radius:999px;animation:floatChip 3s ease-in-out infinite">
+              <svg width="14" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#FF8A5C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Nice — you gave a concrete example
+            </div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:2px">
+              <div style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;color:#fff">
+                <svg width="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="2"/><path d="M10 10.5a2.5 2.5 0 1 0 0 3M17 10.5a2.5 2.5 0 1 0 0 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div style="width:62px;height:62px;border-radius:50%;background:#FF5836;display:flex;align-items:center;justify-content:center;color:#fff">
+                <svg width="24" viewBox="0 0 24 24" fill="none"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M6 11a6 6 0 0 0 12 0M12 17v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;color:#fff">
+                <svg width="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="13" height="12" rx="3" stroke="currentColor" stroke-width="2"/><path d="M16 10l5-3v10l-5-3" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              </div>
+              <div data-goto="results" style="width:52px;height:52px;border-radius:50%;background:#C0331A;display:flex;align-items:center;justify-content:center;color:#fff">
+                <svg width="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.3.2 2.5.57 3.6a1 1 0 0 1-.24 1l-2.23 2.2z" transform="rotate(135 12 12)"/></svg>
+              </div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="cell" data-id="results">
+      <div class="label">Results</div>
+      <div class="device" data-screen="results">
+        <div class="device-content"><div class="screen" style="display:flex;flex-direction:column;background:#F4EFE4;color:#1F1A17;font-family:'Hanken Grotesk',system-ui">
+          <div style="padding:60px 22px 0;text-align:center">
+            <div style="font:700 11px 'Hanken Grotesk';letter-spacing:.14em;color:#D8401C">INTERVIEW COMPLETE</div>
+            <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:24px;margin-top:6px">Mock · Product Manager</div>
+          </div>
+          <div style="display:flex;justify-content:center;margin-top:22px">
+            <div style="position:relative;width:172px;height:172px">
+              <svg width="172" height="172" viewBox="0 0 172 172">
+                <circle cx="86" cy="86" r="74" fill="none" stroke="#E5DCC9" stroke-width="14"/>
+                <circle cx="86" cy="86" r="74" fill="none" stroke="#FF5836" stroke-width="14" stroke-linecap="round" stroke-dasharray="465" stroke-dashoffset="84" transform="rotate(-90 86 86)"/>
+              </svg>
+              <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:48px;line-height:1">82</div>
+                <div style="font-size:13px;font-weight:700;color:#D8401C;letter-spacing:.04em">STRONG</div>
+              </div>
+            </div>
+          </div>
+          <div style="padding:24px 22px 0;display:flex;flex-direction:column;gap:14px">
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:600;margin-bottom:6px"><span>Communication</span><span>88</span></div>
+              <div style="height:7px;background:#E5DCC9;border-radius:4px;overflow:hidden"><div style="width:88%;height:100%;background:#3A2952;border-radius:4px"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:600;margin-bottom:6px"><span>Structure</span><span>76</span></div>
+              <div style="height:7px;background:#E5DCC9;border-radius:4px;overflow:hidden"><div style="width:76%;height:100%;background:#3A2952;border-radius:4px"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:600;margin-bottom:6px"><span>Depth of answers</span><span>84</span></div>
+              <div style="height:7px;background:#E5DCC9;border-radius:4px;overflow:hidden"><div style="width:84%;height:100%;background:#3A2952;border-radius:4px"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:13.5px;font-weight:600;margin-bottom:6px"><span>Confidence</span><span>80</span></div>
+              <div style="height:7px;background:#E5DCC9;border-radius:4px;overflow:hidden"><div style="width:80%;height:100%;background:#3A2952;border-radius:4px"></div></div>
+            </div>
+          </div>
+          <div style="padding:20px 22px 0;display:flex;gap:12px">
+            <div style="flex:1;background:#EFE7DA;border-radius:18px;padding:15px">
+              <div style="font:700 11px 'Hanken Grotesk';letter-spacing:.08em;color:#A8742B;margin-bottom:8px">STOOD OUT</div>
+              <div style="font-size:12.5px;line-height:1.4;color:#5a4422">Clear STAR structure and a concrete metric on Q3.</div>
+            </div>
+            <div style="flex:1;background:#FBE3DA;border-radius:18px;padding:15px">
+              <div style="font:700 11px 'Hanken Grotesk';letter-spacing:.08em;color:#C0492A;margin-bottom:8px">WORK ON</div>
+              <div style="font-size:12.5px;line-height:1.4;color:#5e2c1c">Tighten openings — you buried the result twice.</div>
+            </div>
+          </div>
+          <div style="padding:18px 22px 34px;margin-top:auto;display:flex;gap:12px">
+            <div style="flex:1;background:#fff;border:1px solid #E7E0D0;color:#1F1A17;text-align:center;font-weight:700;font-size:14.5px;padding:15px;border-radius:16px">Transcript</div>
+            <div data-goto="home" style="flex:1.3;background:#FF5836;color:#fff;text-align:center;font-weight:700;font-size:14.5px;padding:15px;border-radius:16px;box-shadow:0 8px 18px rgba(255,88,54,.3)">Practice again</div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 3 · PRICING & PAYMENT                                -->
+  <!-- ============================================================ -->
+  <div class="section-title">Pricing &amp; payment</div>
+  <div class="section-sub">Choose a plan → review &amp; pay</div>
+
+  <div class="row" style="margin-bottom:36px">
+
+    <!-- PLANS -->
+    <div class="cell" data-id="plans">
+      <div class="label">Plans</div>
+      <div class="device" data-screen="plans">
+        <div class="device-content"><div class="screen" style="display:flex;flex-direction:column;background:#F4EFE4;color:#1F1A17;font-family:'Hanken Grotesk',system-ui">
+          <div style="padding:58px 22px 0;display:flex;align-items:center;justify-content:space-between">
+            <div data-goto="home" style="width:38px;height:38px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid #E7E0D0">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="#1F1A17" stroke-width="2.4" stroke-linecap="round"/></svg>
+            </div>
+            <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:16px">Choose your plan</div>
+            <div style="width:38px"></div>
+          </div>
+          <div style="padding:20px 22px 4px;text-align:center">
+            <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:26px;letter-spacing:-.01em;line-height:1.12">Interview as much<br>as you need.</div>
+            <div style="display:inline-flex;background:#EAE3D4;border-radius:11px;padding:3px;margin-top:14px;font-size:13px;font-weight:600">
+              <div style="padding:7px 16px;background:#fff;border-radius:9px;color:#1F1A17;box-shadow:0 1px 3px rgba(0,0,0,.06)">Monthly</div>
+              <div style="padding:7px 16px;color:#8B8576">Yearly <span style="color:#D8401C;font-weight:700">−20%</span></div>
+            </div>
+          </div>
+          <div style="padding:18px 22px 0;display:flex;flex-direction:column;gap:12px">
+            <div style="background:#fff;border:1px solid #E7E0D0;border-radius:20px;padding:16px 17px;display:flex;align-items:center;justify-content:space-between">
+              <div>
+                <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:17px">Standard</div>
+                <div style="font-size:12.5px;color:#8B8576;margin-top:2px">10 interviews / month</div>
+              </div>
+              <div style="text-align:right"><div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:19px">$12.99</div><div style="font-size:11px;color:#8B8576">per month</div></div>
+            </div>
+            <div style="background:linear-gradient(150deg,#3A2952,#241634);border-radius:22px;padding:18px 17px;color:#fff;position:relative;overflow:hidden;box-shadow:0 16px 34px rgba(58,41,82,.32)">
+              <div style="position:absolute;right:-26px;top:-26px;width:110px;height:110px;border-radius:50%;background:radial-gradient(circle,rgba(255,88,54,.3),transparent 70%)"></div>
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div style="display:flex;align-items:center;gap:8px"><div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:18px">Plus</div><div style="background:#FF5836;color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:999px;letter-spacing:.04em">BEST VALUE</div></div>
+                <div style="text-align:right"><div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:21px">$24.99</div><div style="font-size:11px;color:rgba(255,255,255,.65)">per month</div></div>
+              </div>
+              <div style="font-size:12.5px;color:rgba(255,255,255,.78);margin-top:6px">30 interviews / month</div>
+              <div style="height:1px;background:rgba(255,255,255,.14);margin:14px 0"></div>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;align-items:center;gap:9px;font-size:13px"><svg width="15" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#FF8A5C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Full scorecards &amp; transcripts</div>
+                <div style="display:flex;align-items:center;gap:9px;font-size:13px"><svg width="15" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#FF8A5C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>All interviewer styles &amp; voices</div>
+                <div style="display:flex;align-items:center;gap:9px;font-size:13px"><svg width="15" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#FF8A5C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>40+ languages</div>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #E7E0D0;border-radius:20px;padding:16px 17px;display:flex;align-items:center;justify-content:space-between">
+              <div>
+                <div style="display:flex;align-items:center;gap:7px"><div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:17px">Max</div><div style="background:#EFE7DA;color:#A8742B;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px">TEAMS</div></div>
+                <div style="font-size:12.5px;color:#8B8576;margin-top:2px">300 interviews / month</div>
+              </div>
+              <div style="text-align:right"><div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:19px">$99</div><div style="font-size:11px;color:#8B8576">per month</div></div>
+            </div>
+          </div>
+          <div style="margin-top:auto;padding:16px 22px 34px;background:linear-gradient(transparent,#F4EFE4 30%)">
+            <div data-goto="payment" style="background:#FF5836;color:#fff;text-align:center;font-weight:700;font-size:16px;padding:16px;border-radius:18px;box-shadow:0 8px 20px rgba(255,88,54,.3)">Continue with Plus</div>
+            <div style="text-align:center;margin-top:12px;font-size:12px;color:#a39d8e">Cancel anytime · 7-day free trial</div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- CHECKOUT -->
+    <div class="cell" data-id="payment">
+      <div class="label">Payment</div>
+      <div class="device" data-screen="payment">
+        <div class="device-content"><div class="screen" style="display:flex;flex-direction:column;background:#F4EFE4;color:#1F1A17;font-family:'Hanken Grotesk',system-ui">
+          <div style="padding:58px 22px 0;display:flex;align-items:center;gap:12px">
+            <div data-goto="plans" style="width:38px;height:38px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex:none;border:1px solid #E7E0D0">
+              <svg width="11" height="18" viewBox="0 0 12 20" fill="none"><path d="M10 2L2 10l8 8" stroke="#1F1A17" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:21px">Review &amp; pay</div>
+          </div>
+          <div style="margin:20px 22px 0;background:#fff;border:1px solid #E7E0D0;border-radius:20px;padding:17px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="display:flex;align-items:center;gap:11px">
+                <div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(150deg,#3A2952,#241634);display:flex;align-items:center;justify-content:center;color:#FF8A5C;font-family:'Bricolage Grotesque';font-weight:700">+</div>
+                <div><div style="font-weight:700;font-size:16px">Plus plan</div><div style="font-size:12.5px;color:#8B8576">30 interviews / month</div></div>
+              </div>
+              <div data-goto="plans" style="font-size:13px;font-weight:700;color:#D8401C">Change</div>
+            </div>
+            <div style="height:1px;background:#EEE7D8;margin:15px 0"></div>
+            <div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:8px"><span style="color:#8B8576">Plus · monthly</span><span style="font-weight:600">$24.99</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:13.5px;margin-bottom:8px"><span style="color:#8B8576">7-day free trial</span><span style="font-weight:600;color:#D8401C">−$24.99</span></div>
+            <div style="height:1px;background:#EEE7D8;margin:12px 0"></div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-weight:700;font-size:15px">Due today</span><span style="font-family:'Bricolage Grotesque';font-weight:700;font-size:22px">$0.00</span></div>
+            <div style="font-size:11.5px;color:#a39d8e;margin-top:4px">Then $24.99 / month from 30 Jun. Cancel anytime.</div>
+          </div>
+          <div style="padding:22px 22px 0">
+            <div style="font:700 12px 'Hanken Grotesk';letter-spacing:.1em;color:#8B8576;margin-bottom:10px">PAY WITH</div>
+            <div style="display:flex;gap:10px;margin-bottom:12px">
+              <div style="flex:1;background:#1F1A17;color:#fff;border-radius:14px;padding:13px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:14.5px;font-weight:600">
+                <svg width="16" viewBox="0 0 24 24" fill="#fff"><path d="M16.4 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9s-1.8-.8-3-.8c-1.5 0-2.9.9-3.7 2.3-1.6 2.7-.4 6.8 1.1 9 .8 1.1 1.6 2.3 2.8 2.2 1.1 0 1.5-.7 2.9-.7s1.7.7 2.9.7 2-1.1 2.7-2.1c.9-1.2 1.2-2.4 1.3-2.5-.1 0-2.5-1-2.5-3.9z"/></svg>Pay
+              </div>
+              <div style="flex:1;background:#fff;border:1px solid #E7E0D0;border-radius:14px;padding:13px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:14.5px;font-weight:600">
+                <svg width="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.5 12.2c0-.7-.1-1.4-.2-2H12v3.9h5.9a5 5 0 0 1-2.2 3.3v2.7h3.5c2-1.9 3.3-4.7 3.3-7.9z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.5-2.7c-1 .7-2.3 1.1-3.8 1.1-2.9 0-5.4-2-6.3-4.6H2v2.8A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.7 14.1a6.6 6.6 0 0 1 0-4.2V7.1H2a11 11 0 0 0 0 9.8z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3 .6 4.2 1.6l3.1-3.1A11 11 0 0 0 2 7.1l3.7 2.8C6.6 7.3 9.1 5.4 12 5.4z"/></svg>Pay
+              </div>
+            </div>
+            <div style="background:#fff;border:2px solid #FF5836;border-radius:16px;padding:15px 16px;display:flex;align-items:center;gap:12px">
+              <svg width="26" viewBox="0 0 24 24" fill="none"><rect x="2" y="5" width="20" height="14" rx="3" stroke="#1F1A17" stroke-width="1.8"/><path d="M2 9h20" stroke="#1F1A17" stroke-width="1.8"/></svg>
+              <div style="flex:1"><div style="font-size:14.5px;font-weight:600">Card ending 4242</div><div style="font-size:11.5px;color:#8B8576">Visa · expires 08/27</div></div>
+              <div style="width:20px;height:20px;border-radius:50%;background:#FF5836;display:flex;align-items:center;justify-content:center"><svg width="11" viewBox="0 0 24 24" fill="none"><path d="M5 12.5l4.5 4.5L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            </div>
+            <div style="margin-top:11px;display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:600;color:#8B8576;padding-left:2px">
+              <svg width="18" viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="#8B8576" stroke-width="2" stroke-linecap="round"/></svg>Add new card
+            </div>
+          </div>
+          <div style="margin-top:auto;padding:16px 22px 34px">
+            <div style="display:flex;align-items:center;justify-content:center;gap:7px;font-size:12px;color:#a39d8e;margin-bottom:13px">
+              <svg width="13" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="9" rx="2" stroke="#a39d8e" stroke-width="1.8"/><path d="M8 11V8a4 4 0 0 1 8 0v3" stroke="#a39d8e" stroke-width="1.8"/></svg>
+              Secured by 256-bit encryption
+            </div>
+            <div data-goto="home" style="background:#FF5836;color:#fff;text-align:center;font-weight:700;font-size:16.5px;padding:17px;border-radius:18px;box-shadow:0 10px 24px rgba(255,88,54,.34)">Start free trial</div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- LIVE MOOD B -->
+    <div class="cell" data-id="live-night">
+      <div class="label">Live · mood B (deep night)</div>
+      <div class="device dark" data-screen="live-night">
+        <div class="device-content"><div class="screen" style="display:flex;flex-direction:column;background:radial-gradient(120% 80% at 50% 22%,#211a26,#100c14 70%);color:#fff;font-family:'Hanken Grotesk',system-ui">
+          <div style="padding:58px 18px 0;display:flex;align-items:flex-start;justify-content:space-between">
+            <div style="display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);backdrop-filter:blur(8px);padding:7px 13px;border-radius:999px;font-size:13px;font-weight:700"><div style="width:7px;height:7px;border-radius:50%;background:#FF5836"></div>14:52</div>
+            <div style="width:84px;height:112px;border-radius:18px;border:1.5px solid rgba(255,255,255,.12);background:linear-gradient(160deg,#2a2230,#16121b);overflow:hidden;position:relative">
+              <svg width="44" viewBox="0 0 24 24" fill="none" style="position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);opacity:.4"><circle cx="12" cy="9" r="4" stroke="#fff" stroke-width="1.5"/><path d="M5 20a7 7 0 0 1 14 0" stroke="#fff" stroke-width="1.5"/></svg>
+            </div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px">
+            <div style="position:relative;width:236px;height:236px;display:flex;align-items:center;justify-content:center">
+              <div style="position:absolute;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(255,88,54,.5),transparent 60%);filter:blur(4px);animation:glowPulse 3s ease-in-out infinite"></div>
+              <div style="position:absolute;width:196px;height:196px;border-radius:50%;border:1.5px solid rgba(255,138,92,.6);animation:ringPulse 3s ease-out infinite"></div>
+              <div style="position:absolute;width:196px;height:196px;border-radius:50%;border:1.5px solid rgba(255,138,92,.45);animation:ringPulse 3s ease-out infinite;animation-delay:1.5s"></div>
+              <div style="position:relative;width:196px;height:196px;border-radius:50%;background:radial-gradient(circle at 38% 32%,#FFE9DC 0%,#FF8A5C 32%,#FF5836 60%,#7A2410 100%);box-shadow:0 0 90px rgba(255,88,54,.6),inset 0 -16px 40px rgba(0,0,0,.4),inset 0 14px 30px rgba(255,255,255,.4);animation:orbBreathe 3.6s ease-in-out infinite;display:flex;align-items:center;justify-content:center">
+                <div style="display:flex;align-items:center;gap:5px;height:44px">
+                  <div style="width:5px;height:40%;background:rgba(255,255,255,.92);border-radius:3px;animation:bar 1s ease-in-out infinite"></div>
+                  <div style="width:5px;height:75%;background:rgba(255,255,255,.92);border-radius:3px;animation:bar 1s ease-in-out infinite;animation-delay:.15s"></div>
+                  <div style="width:5px;height:100%;background:rgba(255,255,255,.92);border-radius:3px;animation:bar 1s ease-in-out infinite;animation-delay:.3s"></div>
+                  <div style="width:5px;height:58%;background:rgba(255,255,255,.92);border-radius:3px;animation:bar 1s ease-in-out infinite;animation-delay:.45s"></div>
+                  <div style="width:5px;height:46%;background:rgba(255,255,255,.92);border-radius:3px;animation:bar 1s ease-in-out infinite;animation-delay:.6s"></div>
+                </div>
+              </div>
+            </div>
+            <div style="text-align:center"><div style="font-family:'Bricolage Grotesque';font-weight:700;font-size:20px">Aria</div><div style="font-size:13px;color:#FF8A5C;font-weight:600;margin-top:3px">Listening…</div></div>
+          </div>
+          <div style="padding:0 18px 34px;display:flex;flex-direction:column;gap:14px">
+            <div style="text-align:center;font-size:15.5px;line-height:1.5;color:rgba(255,255,255,.92);padding:0 6px">Tell me about a time you influenced a team without authority.</div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:16px">
+              <div style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff"><svg width="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="3" stroke="currentColor" stroke-width="2"/><path d="M10 10.5a2.5 2.5 0 1 0 0 3M17 10.5a2.5 2.5 0 1 0 0 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+              <div style="width:62px;height:62px;border-radius:50%;background:#FF5836;display:flex;align-items:center;justify-content:center;color:#fff"><svg width="24" viewBox="0 0 24 24" fill="none"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M6 11a6 6 0 0 0 12 0M12 17v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+              <div style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;color:#fff"><svg width="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="13" height="12" rx="3" stroke="currentColor" stroke-width="2"/><path d="M16 10l5-3v10l-5-3" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
+              <div data-goto="results" style="width:52px;height:52px;border-radius:50%;background:#C0331A;display:flex;align-items:center;justify-content:center;color:#fff"><svg width="22" viewBox="0 0 24 24" fill="currentColor"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24c1.1.37 2.3.57 3.6.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.3.2 2.5.57 3.6a1 1 0 0 1-.24 1l-2.23 2.2z" transform="rotate(135 12 12)"/></svg></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<script src="prototype.js"></script>
+</body>
+</html>

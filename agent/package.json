@@ -1,0 +1,29 @@
+{
+  "name": "viva-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "viva LiveKit voice agent worker — joins the interview room, runs VAD/STT/TTS, and drives turns via the backend brain.",
+  "scripts": {
+    "spike": "tsx src/spike.ts",
+    "dev": "tsx watch src/agent.ts dev",
+    "start": "tsx src/agent.ts start",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@livekit/agents": "^1.4.9",
+    "@livekit/agents-plugin-deepgram": "^1.4.9",
+    "@livekit/agents-plugin-cartesia": "^1.4.9",
+    "@livekit/agents-plugin-silero": "^1.4.9",
+    "@livekit/rtc-node": "^0.13.29",
+    "livekit-server-sdk": "^2.13.4",
+    "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "@types/node": "^24.7.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  }
+}
