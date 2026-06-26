@@ -114,7 +114,7 @@ npx expo run:ios        # iOS Simulator   (add --device for a real iPhone)
 npx expo run:android    # Android emulator (add --device for a real phone)
 ```
 
-Full per-platform setup, signing, and networking details: [iOS.md](iOS.md) and [ANDROID.md](ANDROID.md).
+Full per-platform setup, signing, and networking details: [iOS.md](iOS.md) and [ANDROID.md](ANDROID.md). Everyday commands (start/stop/restart services, simulators, devices) are in [DEVELOPMENT.md](DEVELOPMENT.md); `./restart.sh` cleanly stops and restarts the backend stack.
 
 ## Configuration
 
@@ -182,6 +182,9 @@ cd mobile && npx tsc --noEmit
 Server and agent tests inject mock LLM clients and an in-memory store, so no real keys or database are needed. (The live-API scoring calibration gate is separate: `cd server && npm run eval`, which requires `ANTHROPIC_API_KEY`.)
 
 ## Documentation
+
+- [DEVELOPMENT.md](DEVELOPMENT.md) — everyday dev commands: start/stop/restart the backend stack, Metro, simulators, and devices.
+- [iOS.md](iOS.md) / [ANDROID.md](ANDROID.md) — run the mobile app on each platform.
 
 Design, spec, and operational docs live in [docs/](docs/):
 
