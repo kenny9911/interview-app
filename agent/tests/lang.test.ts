@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   spoken, parseLanguage, sttLang, ttsLang, sttEndpointingMs,
-  endpointingFloor, eouThreshold, cartesiaVoiceFor, normalizeTurnText,
+  endpointingFloor, eouThreshold, cartesiaVoiceFor, elevenlabsVoiceForKo, normalizeTurnText,
 } from '../src/lang.js';
 
 const NO_ENV = {} as NodeJS.ProcessEnv;
@@ -70,6 +70,14 @@ describe('cartesiaVoiceFor — no awkward-foreigner voice', () => {
     // The English generic voice is set, but a zh session must NOT use it.
     expect(() => cartesiaVoiceFor('aria', 'zh-Hans', { CARTESIA_VOICE_ARIA: 'en-legacy' })).toThrow(/refusing to speak/);
     expect(() => cartesiaVoiceFor('lena', 'ja', NO_ENV)).toThrow(/CARTESIA_VOICE_LENA_JA/);
+  });
+
+  it('Korean uses native ElevenLabs voices (env override → baked native default)', () => {
+    // Defaults are real native-Korean Voice-Library ids — never empty, never an EN voice.
+    expect(elevenlabsVoiceForKo('aria', NO_ENV)).toBe('tIXHSlSWOafJawXSV1g4');
+    expect(elevenlabsVoiceForKo('sam', NO_ENV)).toBe('fHzGR8qcnsDR2uaj9r16');
+    expect(elevenlabsVoiceForKo('lena', NO_ENV)).toBe('UvkXHIJzOBYWOI51BDKp');
+    expect(elevenlabsVoiceForKo('aria', { ELEVENLABS_VOICE_ARIA_KO: 'custom-ko' })).toBe('custom-ko');
   });
 });
 

@@ -68,6 +68,7 @@ describe('Language locale model (i18n)', () => {
   it('rollout gate is the gated subset, not the whole enum', () => {
     expect(SUPPORTED_LANGUAGES_P0).toContain('en');
     expect(SUPPORTED_LANGUAGES_P0).toContain('zh-Hans');
+    expect(SUPPORTED_LANGUAGES_P0).toContain('ko'); // Korean enabled (ElevenLabs voices)
     expect(SUPPORTED_LANGUAGES_P0).not.toContain('ja'); // not rolled out yet
   });
 
@@ -79,10 +80,12 @@ describe('Language locale model (i18n)', () => {
     expect(spokenLang('ko')).toBe('ko');
   });
 
-  it('scriptInstruction is total and script-correct for Chinese', () => {
+  it('scriptInstruction is total and script-correct per language', () => {
     for (const l of Language.options) expect(scriptInstruction(l).length).toBeGreaterThan(0);
     expect(scriptInstruction('zh-Hans')).toContain('简体');
     expect(scriptInstruction('zh-Hant')).toContain('繁體');
+    expect(scriptInstruction('ja')).toContain('日本語');
+    expect(scriptInstruction('ko')).toContain('한국어');
   });
 });
 

@@ -40,7 +40,9 @@ export const LanguageInput = z.preprocess((v) => {
 // Rollout gate (D0): a language is accepted by the API only once its
 // STT/TTS/voice/prompt/integrity slice is green. Widen ONE entry at a time;
 // widening the enum above does NOT open the gate. (docs/30-i18n.md §10)
-export const SUPPORTED_LANGUAGES_P0: Language[] = ['en', 'zh-Hans'];
+// ko: enabled with native ElevenLabs voices (Cartesia has no Korean); the brain,
+// Hangul-aware integrity, and Korean TTS are wired. zh-Hant/ja remain gated.
+export const SUPPORTED_LANGUAGES_P0: Language[] = ['en', 'zh-Hans', 'ko'];
 
 /** Spoken language (drives ASR/TTS code, voice matrix, endpointing). Simplified
  *  and Traditional are the same spoken Mandarin → both collapse to 'zh'. */

@@ -103,6 +103,22 @@ export function cartesiaVoiceFor(persona: Persona, l: Lang, e: NodeJS.ProcessEnv
   );
 }
 
+// Korean is NOT Cartesia (it has no Korean) — it uses ElevenLabs. These are
+// native-Korean ElevenLabs Voice-Library voices chosen as provisional defaults;
+// env-overridable per persona, and meant to be vetted/swapped by a Korean speaker
+// (docs/30-i18n.md §4.2). aria=Miso Choi (calm Seoul, F), sam=Hojin Lim (M),
+// lena=Jeong-Ah (warm, F).
+const ELEVENLABS_KO_VOICE: Record<Persona, string> = {
+  aria: 'tIXHSlSWOafJawXSV1g4',
+  sam: 'fHzGR8qcnsDR2uaj9r16',
+  lena: 'UvkXHIJzOBYWOI51BDKp',
+};
+
+/** ElevenLabs voice id for a persona speaking Korean (env override → native default). */
+export function elevenlabsVoiceForKo(persona: Persona, e: NodeJS.ProcessEnv = process.env): string {
+  return e[`ELEVENLABS_VOICE_${persona.toUpperCase()}_KO`] || ELEVENLABS_KO_VOICE[persona];
+}
+
 // CJK ranges (Hiragana/Katakana, Han incl. Ext-A, CJK Compat, Hangul syllables).
 const CJK_SRC = '[\\u3040-\\u30ff\\u3400-\\u9fff\\uf900-\\ufaff\\uac00-\\ud7af]';
 const CJK_GAP = new RegExp(`(${CJK_SRC})\\s+(?=${CJK_SRC})`, 'gu');

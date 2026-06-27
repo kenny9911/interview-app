@@ -24,13 +24,14 @@ import {
 import * as silero from '@livekit/agents-plugin-silero';
 import * as deepgram from '@livekit/agents-plugin-deepgram';
 import * as cartesia from '@livekit/agents-plugin-cartesia';
+import * as elevenlabs from '@livekit/agents-plugin-elevenlabs';
 import { env, assertLiveCreds } from './env.js';
 import { BackendClient, type TurnReply } from './backendClient.js';
 import { type Style, vadTuning, endpointingForStyle, interruptionForStyle } from './voiceConfig.js';
 import { formatMetricLine, type MetricLike } from './metricsLogger.js';
 import {
-  type Lang, parseLanguage, sttLang, ttsLang, sttEndpointingMs,
-  endpointingFloor, eouThreshold, cartesiaVoiceFor, normalizeTurnText,
+  type Lang, parseLanguage, spoken, sttLang, ttsLang, sttEndpointingMs,
+  endpointingFloor, eouThreshold, cartesiaVoiceFor, elevenlabsVoiceForKo, normalizeTurnText,
 } from './lang.js';
 
 // Spoken when a turn fails after the client's retries — keeps the conversation
@@ -205,7 +206,6 @@ export default defineAgent({
     const style = (parseStyle(ctx.room.metadata) ?? 'balanced') as Style;
     const persona = parsePersona(ctx.room.metadata);
     const language = parseLanguage(ctx.room.metadata); // canonical locale (default 'en')
-    const voiceId = resolveVoiceId(persona, language); // (persona × language) voice — never the EN voice for a non-EN session
     const backend = new BackendClient();
 
     const vad = (ctx.proc.userData.vad as LoadedVad | undefined) ?? (await silero.VAD.load());
@@ -235,7 +235,7 @@ export default defineAgent({
         detectLanguage: false,
         endpointing: sttEndpointingMs(language),
       }),
-      tts: new cartesia.TTS({ model: env.TTS_MODEL, language: ttsLang(language), ...(voiceId ? { voice: voiceId } : {}) }),
+      tts: makeTts(language, persona),
       turnDetection,
       turnHandling: {
         endpointing: { minDelay: endpointing.minDelay, maxDelay: endpointing.maxDelay },
@@ -383,6 +383,25 @@ function resolveVoiceId(persona: Persona | null, language: Lang): string | undef
     console.error('[agent]', (err as Error).message);
     return undefined;
   }
+}
+
+// Per-language TTS: Korean → ElevenLabs (Cartesia has no Korean), everything else
+// → Cartesia. Both extend the shared tts.TTS base so AgentSession is provider-
+// agnostic. A native-recorded voice is used per (persona × language); we never
+// speak a language through a non-native voice (docs/30-i18n.md §3.6/§4).
+function makeTts(language: Lang, persona: Persona | null) {
+  if (spoken(language) === 'ko') {
+    const apiKey = process.env.ELEVENLABS_API_KEY;
+    if (!apiKey) throw new Error('ELEVENLABS_API_KEY is required for Korean TTS (Cartesia has no Korean).');
+    return new elevenlabs.TTS({
+      apiKey,
+      voiceId: elevenlabsVoiceForKo(persona ?? 'aria'),
+      modelID: process.env.ELEVENLABS_MODEL ?? 'eleven_flash_v2_5',
+      language: 'ko',
+    });
+  }
+  const voiceId = resolveVoiceId(persona, language);
+  return new cartesia.TTS({ model: env.TTS_MODEL, language: ttsLang(language), ...(voiceId ? { voice: voiceId } : {}) });
 }
 
 function parseStyle(metadata: string | undefined): Style | null {

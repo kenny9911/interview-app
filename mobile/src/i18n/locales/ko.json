@@ -1,0 +1,48 @@
+{
+  "common": {
+    "back": "뒤로",
+    "gotIt": "확인",
+    "comingSoon": "준비 중"
+  },
+  "languagePicker": {
+    "title": "언어",
+    "subtitle": "앱과 면접에 사용할 언어를 설정합니다."
+  },
+  "chooseMode": {
+    "title": "무엇을\n하시겠어요?",
+    "continueWith": "{{mode}} 계속하기",
+    "comingSoonTitle": "준비 중",
+    "comingSoonBody": "이 모드는 고용주의 초대가 필요합니다. 초대를 받으면 여기에 표시되어 바로 시작할 수 있습니다.",
+    "badges": { "popular": "인기", "invite": "초대" },
+    "modes": {
+      "mock": { "title": "모의 면접", "sub": "실전처럼 채점되는 전체 연습 라운드." },
+      "real": { "title": "실전 면접", "sub": "고용주가 예약한 면접에 참여합니다." },
+      "topic_practice": { "title": "주제별 연습", "sub": "특정 역량을 즉각적인 코칭과 함께 집중 훈련." },
+      "capability_assessment": { "title": "역량 평가", "sub": "고용주가 실제 역량을 평가합니다." },
+      "expert_interview": { "title": "전문가 인터뷰", "sub": "AI 전문가에게 질문해 노하우를 끌어냅니다." }
+    }
+  },
+  "setup": {
+    "title": {
+      "mock": "모의 면접 설정",
+      "topic_practice": "주제별 연습 설정",
+      "capability_assessment": "역량 평가 설정",
+      "default": "면접 설정"
+    },
+    "cameraReady": "카메라 준비됨",
+    "role": "지원 직무",
+    "rolePlaceholder": "프로덕트 매니저",
+    "style": "면접관 스타일",
+    "styles": { "friendly": "친근하게", "balanced": "균형 있게", "tough": "엄격하게" },
+    "interviewer": "면접관",
+    "personas": { "aria": "채용 담당자", "sam": "동료", "lena": "디렉터" },
+    "language": "언어",
+    "length": "시간",
+    "minutes": "분",
+    "topic": "중점 주제 (선택)",
+    "topicPlaceholder": "예: 지표, 리더십, 시스템 설계",
+    "start": "면접 시작",
+    "starting": "면접을 준비하는 중…",
+    "error": "문제가 발생했습니다. 다시 시도해 주세요."
+  }
+}
