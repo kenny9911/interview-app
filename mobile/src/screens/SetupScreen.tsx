@@ -1,29 +1,33 @@
 import React, { useState } from 'react';
 import { View, Text, Pressable, TextInput } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useTranslation } from 'react-i18next';
 import { ScreenScroll, Display, Label, PrimaryButton, BackButton } from '../components/ui';
-import { colors, fonts } from '../theme';
+import { LanguagePicker } from '../components/LanguagePicker';
+import { colors } from '../theme';
+import { useThemeFonts } from '../theme.fonts';
+import { useLocale } from '../i18n/LocaleProvider';
+import { NATIVE_NAME } from '../i18n/resources';
 import { useNav, useRouteParams } from '../navigation';
 import { api, ApiError, type Persona, type Style } from '../api';
-import { ChevronLeft, Person, Globe, ArrowRight } from '../icons';
+import { ChevronLeft, Person, Globe, ChevronDown, ArrowRight } from '../icons';
 
-const STYLES: { label: string; value: Style }[] = [
-  { label: 'Friendly', value: 'friendly' },
-  { label: 'Balanced', value: 'balanced' },
-  { label: 'Tough', value: 'tough' },
-];
+const STYLE_VALUES: Style[] = ['friendly', 'balanced', 'tough'];
 const EQ_HEIGHTS = [40, 75, 55, 95, 45, 70];
 const LENGTHS = [10, 20, 30] as const;
 
-const INTERVIEWERS: { name: string; value: Persona; role: string; grad: readonly [string, string] }[] = [
-  { name: 'Aria', value: 'aria', role: 'Hiring mgr', grad: ['#FFB48C', '#D8401C'] },
-  { name: 'Sam', value: 'sam', role: 'Peer', grad: ['#C7B6E8', '#6E5AA8'] },
-  { name: 'Lena', value: 'lena', role: 'Director', grad: ['#E7C8A0', '#A8742B'] },
+const INTERVIEWERS: { name: string; value: Persona; grad: readonly [string, string] }[] = [
+  { name: 'Aria', value: 'aria', grad: ['#FFB48C', '#D8401C'] },
+  { name: 'Sam', value: 'sam', grad: ['#C7B6E8', '#6E5AA8'] },
+  { name: 'Lena', value: 'lena', grad: ['#E7C8A0', '#A8742B'] },
 ];
 
 export default function SetupScreen() {
   const nav = useNav();
   const { mode } = useRouteParams<'Setup'>();
+  const { t } = useTranslation();
+  const fonts = useThemeFonts();
+  const { locale } = useLocale();
 
   const [role, setRole] = useState('Product Manager');
   const [style, setStyle] = useState<Style>('balanced');
@@ -32,6 +36,7 @@ export default function SetupScreen() {
   const [topicFocus, setTopicFocus] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [langOpen, setLangOpen] = useState(false);
 
   async function onStart() {
     if (submitting) return;
@@ -43,13 +48,13 @@ export default function SetupScreen() {
         role: role.trim() || 'Product Manager',
         persona,
         style,
-        language: 'en',
+        language: locale, // the selected app locale IS the interview language (canonical BCP-47)
         lengthMinutes,
         topicFocus: topicFocus.trim() || undefined,
       });
       nav.navigate('Consent', { configId: res.config.id });
     } catch (e) {
-      const msg = e instanceof ApiError ? e.body || e.message : e instanceof Error ? e.message : 'Something went wrong. Please try again.';
+      const msg = e instanceof ApiError ? e.body || e.message : e instanceof Error ? e.message : t('setup.error');
       setError(msg);
       setSubmitting(false);
     }
@@ -65,7 +70,7 @@ export default function SetupScreen() {
             </Text>
           ) : null}
           <PrimaryButton
-            label={submitting ? 'Building your interview…' : 'Start interview'}
+            label={submitting ? t('setup.starting') : t('setup.start')}
             fontSize={16.5}
             padding={17}
             rightIcon={submitting ? undefined : <ArrowRight size={18} />}
@@ -80,7 +85,7 @@ export default function SetupScreen() {
         <BackButton onPress={() => nav.navigate('ChooseMode')}>
           <ChevronLeft size={18} color={colors.ink} />
         </BackButton>
-        <Display style={{ fontSize: 21 }}>{({ mock: 'Set up your mock', topic_practice: 'Set up your topic practice', capability_assessment: 'Set up your assessment' } as Record<string, string>)[mode] ?? 'Set up your interview'}</Display>
+        <Display style={{ fontSize: 21 }}>{t(`setup.title.${mode}`, { defaultValue: t('setup.title.default') })}</Display>
       </View>
 
       {/* camera preview */}
@@ -118,7 +123,7 @@ export default function SetupScreen() {
           }}
         >
           <View style={{ width: 7, height: 7, borderRadius: 3.5, backgroundColor: colors.persimmon }} />
-          <Text style={{ color: '#fff', fontFamily: fonts.semibold, fontSize: 12 }}>Camera ready</Text>
+          <Text style={{ color: '#fff', fontFamily: fonts.semibold, fontSize: 12 }}>{t('setup.cameraReady')}</Text>
         </View>
 
         {/* equalizer */}
@@ -133,12 +138,12 @@ export default function SetupScreen() {
       <View style={{ paddingHorizontal: 22, paddingTop: 22, gap: 18 }}>
         {/* ROLE */}
         <View>
-          <Label style={{ marginBottom: 9 }}>Role</Label>
+          <Label style={{ marginBottom: 9 }}>{t('setup.role')}</Label>
           <View style={fieldBox}>
             <TextInput
               value={role}
               onChangeText={setRole}
-              placeholder="Product Manager"
+              placeholder={t('setup.rolePlaceholder')}
               placeholderTextColor={colors.faint}
               editable={!submitting}
               returnKeyType="done"
@@ -149,18 +154,19 @@ export default function SetupScreen() {
 
         {/* INTERVIEWER STYLE */}
         <View>
-          <Label style={{ marginBottom: 9 }}>Interviewer style</Label>
+          <Label style={{ marginBottom: 9 }}>{t('setup.style')}</Label>
           <View style={{ flexDirection: 'row', backgroundColor: '#EAE3D4', borderRadius: 14, padding: 4, gap: 4 }}>
-            {STYLES.map((s) => {
-              const active = s.value === style;
+            {STYLE_VALUES.map((value) => {
+              const active = value === style;
+              const label = t(`setup.styles.${value}`);
               return (
                 <Pressable
-                  key={s.value}
-                  onPress={() => setStyle(s.value)}
+                  key={value}
+                  onPress={() => setStyle(value)}
                   disabled={submitting}
                   accessibilityRole="button"
                   accessibilityState={{ selected: active }}
-                  accessibilityLabel={`Interviewer style: ${s.label}`}
+                  accessibilityLabel={`${t('setup.style')}: ${label}`}
                   style={{
                     flex: 1,
                     alignItems: 'center',
@@ -169,7 +175,7 @@ export default function SetupScreen() {
                     backgroundColor: active ? colors.persimmon : 'transparent',
                   }}
                 >
-                  <Text style={{ fontFamily: active ? fonts.bold : fonts.semibold, fontSize: 14, color: active ? '#fff' : colors.muted }}>{s.label}</Text>
+                  <Text style={{ fontFamily: active ? fonts.bold : fonts.semibold, fontSize: 14, color: active ? '#fff' : colors.muted }}>{label}</Text>
                 </Pressable>
               );
             })}
@@ -178,10 +184,11 @@ export default function SetupScreen() {
 
         {/* INTERVIEWER */}
         <View>
-          <Label style={{ marginBottom: 9 }}>Interviewer</Label>
+          <Label style={{ marginBottom: 9 }}>{t('setup.interviewer')}</Label>
           <View style={{ flexDirection: 'row', gap: 11 }}>
             {INTERVIEWERS.map((it) => {
               const active = it.value === persona;
+              const personaRole = t(`setup.personas.${it.value}`);
               return (
                 <Pressable
                   key={it.value}
@@ -189,7 +196,7 @@ export default function SetupScreen() {
                   disabled={submitting}
                   accessibilityRole="button"
                   accessibilityState={{ selected: active }}
-                  accessibilityLabel={`Interviewer ${it.name}, ${it.role}`}
+                  accessibilityLabel={`${t('setup.interviewer')} ${it.name}, ${personaRole}`}
                   style={{
                     flex: 1,
                     backgroundColor: '#fff',
@@ -208,7 +215,7 @@ export default function SetupScreen() {
                     style={{ width: 42, height: 42, borderRadius: 21, marginBottom: 7 }}
                   />
                   <Text style={{ fontFamily: fonts.bold, fontSize: 13.5, color: colors.ink }}>{it.name}</Text>
-                  <Text style={{ fontFamily: fonts.text, fontSize: 11, color: colors.muted }}>{it.role}</Text>
+                  <Text style={{ fontFamily: fonts.text, fontSize: 11, color: colors.muted }}>{personaRole}</Text>
                 </Pressable>
               );
             })}
@@ -218,15 +225,23 @@ export default function SetupScreen() {
         {/* LANGUAGE + LENGTH */}
         <View style={{ flexDirection: 'row', gap: 14 }}>
           <View style={{ flex: 1 }}>
-            <Label style={{ marginBottom: 9 }}>Language</Label>
-            <View style={[fieldBox, { justifyContent: 'flex-start', gap: 8 }]}>
-              <Globe size={16} color={colors.persimmonD} />
-              <Text style={{ fontFamily: fonts.semibold, fontSize: 14.5, color: colors.ink }}>English</Text>
-            </View>
-            <Text style={{ fontFamily: fonts.text, fontSize: 11, color: colors.faint, marginTop: 6 }}>More languages coming soon</Text>
+            <Label style={{ marginBottom: 9 }}>{t('setup.language')}</Label>
+            <Pressable
+              onPress={() => setLangOpen(true)}
+              disabled={submitting}
+              accessibilityRole="button"
+              accessibilityLabel={`${t('setup.language')}: ${NATIVE_NAME[locale]}`}
+              style={[fieldBox, { justifyContent: 'space-between' }]}
+            >
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <Globe size={16} color={colors.persimmonD} />
+                <Text style={{ fontFamily: fonts.semibold, fontSize: 14.5, color: colors.ink }}>{NATIVE_NAME[locale]}</Text>
+              </View>
+              <ChevronDown size={12} color={colors.muted} />
+            </Pressable>
           </View>
           <View style={{ flex: 1 }}>
-            <Label style={{ marginBottom: 9 }}>Length</Label>
+            <Label style={{ marginBottom: 9 }}>{t('setup.length')}</Label>
             <View style={{ flexDirection: 'row', backgroundColor: '#EAE3D4', borderRadius: 14, padding: 4, gap: 4 }}>
               {LENGTHS.map((m) => {
                 const active = m === lengthMinutes;
@@ -237,7 +252,7 @@ export default function SetupScreen() {
                     disabled={submitting}
                     accessibilityRole="button"
                     accessibilityState={{ selected: active }}
-                    accessibilityLabel={`Length: ${m} minutes`}
+                    accessibilityLabel={`${t('setup.length')}: ${m} ${t('setup.minutes')}`}
                     style={{
                       flex: 1,
                       alignItems: 'center',
@@ -251,18 +266,18 @@ export default function SetupScreen() {
                 );
               })}
             </View>
-            <Text style={{ fontFamily: fonts.text, fontSize: 11, color: colors.faint, marginTop: 6 }}>minutes</Text>
+            <Text style={{ fontFamily: fonts.text, fontSize: 11, color: colors.faint, marginTop: 6 }}>{t('setup.minutes')}</Text>
           </View>
         </View>
 
         {/* TOPIC FOCUS (optional) */}
         <View>
-          <Label style={{ marginBottom: 9 }}>Topic focus (optional)</Label>
+          <Label style={{ marginBottom: 9 }}>{t('setup.topic')}</Label>
           <View style={fieldBox}>
             <TextInput
               value={topicFocus}
               onChangeText={setTopicFocus}
-              placeholder="e.g. metrics, leadership, system design"
+              placeholder={t('setup.topicPlaceholder')}
               placeholderTextColor={colors.faint}
               editable={!submitting}
               returnKeyType="done"
@@ -271,6 +286,8 @@ export default function SetupScreen() {
           </View>
         </View>
       </View>
+
+      <LanguagePicker visible={langOpen} onClose={() => setLangOpen(false)} />
     </ScreenScroll>
   );
 }

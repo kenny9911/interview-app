@@ -1,0 +1,48 @@
+{
+  "common": {
+    "back": "返回",
+    "gotIt": "知道了",
+    "comingSoon": "敬请期待"
+  },
+  "languagePicker": {
+    "title": "语言",
+    "subtitle": "同时设置应用界面和面试所用的语言。"
+  },
+  "chooseMode": {
+    "title": "你想做\n什么？",
+    "continueWith": "继续：{{mode}}",
+    "comingSoonTitle": "敬请期待",
+    "comingSoonBody": "这些模式需要雇主邀请。雇主向你发出邀请后，就会在这里显示，随时可以开始。",
+    "badges": { "popular": "热门", "invite": "邀请" },
+    "modes": {
+      "mock": { "title": "模拟面试", "sub": "完整的练习轮次，按真实标准评分。" },
+      "real": { "title": "正式面试", "sub": "参加雇主安排的面试。" },
+      "topic_practice": { "title": "专项练习", "sub": "针对某项技能强化训练，即时获得指导。" },
+      "capability_assessment": { "title": "能力评估", "sub": "由雇主就真实技能对你进行评估。" },
+      "expert_interview": { "title": "专家访谈", "sub": "向 AI 专家提问，提炼专业经验。" }
+    }
+  },
+  "setup": {
+    "title": {
+      "mock": "设置模拟面试",
+      "topic_practice": "设置专项练习",
+      "capability_assessment": "设置能力评估",
+      "default": "设置面试"
+    },
+    "cameraReady": "摄像头已就绪",
+    "role": "目标岗位",
+    "rolePlaceholder": "产品经理",
+    "style": "面试官风格",
+    "styles": { "friendly": "友好", "balanced": "平衡", "tough": "严格" },
+    "interviewer": "面试官",
+    "personas": { "aria": "招聘经理", "sam": "同级伙伴", "lena": "总监" },
+    "language": "语言",
+    "length": "时长",
+    "minutes": "分钟",
+    "topic": "重点话题（可选）",
+    "topicPlaceholder": "例如：指标、领导力、系统设计",
+    "start": "开始面试",
+    "starting": "正在为你准备面试…",
+    "error": "出错了，请重试。"
+  }
+}

@@ -8,7 +8,7 @@ import { corsOrigins, env } from './env.js';
 import type { LlmClient } from './llm/index.js';
 import { MemoryStore, type Store } from './store.js';
 import {
-  InterviewConfig, MVP_MODES, SUPPORTED_LANGUAGES_P0, Mode, Persona, Style, Language,
+  InterviewConfig, MVP_MODES, SUPPORTED_LANGUAGES_P0, Mode, Persona, Style, LanguageInput,
   type InterviewState, type Turn,
 } from './domain.js';
 import { planInterview, analyzeInterview, beginTurn, nextTurn, reviewAnswer, reconcilePatch, applyPatch } from './agents.js';
@@ -26,7 +26,7 @@ const CreateConfigBody = z.object({
   role: z.string().min(1).max(120),
   persona: Persona,
   style: Style,
-  language: Language.default('en'),
+  language: LanguageInput.default('en'),
   lengthMinutes: z.number().int().min(5).max(60),
   topicFocus: z.string().max(200).optional(),
   jobDescription: z.string().max(8000).optional(),
@@ -168,8 +168,9 @@ export function buildApp(deps: AppDeps): FastifyInstance {
     });
 
     const roomName = roomNameForSession(sessionId);
-    // set persona/style on the room so the agent worker picks the right voice + timing
-    await ensureInterviewRoom(roomName, { persona: config.persona, style: config.style });
+    // set persona/style/language on the room so the agent worker picks the right
+    // voice, timing, and per-language STT/TTS at construction time (docs/30-i18n.md §3.4)
+    await ensureInterviewRoom(roomName, { persona: config.persona, style: config.style, language: config.language });
     const { token, url, expiresAt } = await mintAccessToken({
       roomName, identity: `user-${config.userId}`, name: 'Candidate',
     });
@@ -194,6 +195,7 @@ export function buildApp(deps: AppDeps): FastifyInstance {
       mode: config?.mode ?? null,
       persona: config?.persona ?? null,
       role: config?.role ?? null,
+      language: config?.language ?? null, // drives the live caption chip + report font on the client
       lengthMinutes: config?.lengthMinutes ?? null,
       questionCount: state.plan.questions.length,
       cursorIndex: state.cursorIndex,

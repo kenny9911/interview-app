@@ -43,11 +43,14 @@ export function extractJson(input: string): unknown {
 /** Control-token marker the Interviewer appends; candidate text is stripped of it. */
 export const CTRL_MARKER = '<<<CTRL>>>';
 
-/** Extract the control JSON that follows the sentinel marker (D2). */
+/** Extract the control JSON that follows the sentinel marker (D2). NFKC-folds the
+ *  trailing region first so a non-English model that emits full-width JSON
+ *  punctuation (｛｝："...") still parses, instead of silently defaulting the
+ *  action to "advance" and breaking adaptation for CJK sessions (docs/30-i18n.md §6.6). */
 export function extractControlToken(text: string): unknown | null {
   const idx = text.lastIndexOf(CTRL_MARKER);
   if (idx === -1) return null;
-  const after = text.slice(idx + CTRL_MARKER.length);
+  const after = text.slice(idx + CTRL_MARKER.length).normalize('NFKC');
   const block = firstJsonBlock(after);
   if (block == null) return null;
   try {
@@ -65,13 +68,17 @@ export function stripControlToken(text: string): string {
   let out = text;
   for (let idx = out.indexOf(CTRL_MARKER); idx !== -1; idx = out.indexOf(CTRL_MARKER)) {
     const after = out.slice(idx + CTRL_MARKER.length);
-    const block = firstJsonBlock(after);
+    // Detect the block on an NFKC-folded copy so a full-width-brace token is still
+    // excised from the spoken line (never leaks to TTS). Full-width forms fold
+    // 1:1 to ASCII, so indices align with the original for slicing.
+    const afterN = after.normalize('NFKC');
+    const block = firstJsonBlock(afterN);
     let removeLen = CTRL_MARKER.length;
     if (block != null) {
-      const blockStart = after.indexOf(block);
+      const blockStart = afterN.indexOf(block);
       // only consume the JSON if it sits directly after the marker (whitespace only),
       // so we never swallow real spoken prose that happens to contain braces later.
-      if (after.slice(0, blockStart).trim() === '') removeLen += blockStart + block.length;
+      if (afterN.slice(0, blockStart).trim() === '') removeLen += blockStart + block.length;
     }
     out = out.slice(0, idx) + out.slice(idx + removeLen);
   }

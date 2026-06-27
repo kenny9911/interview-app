@@ -72,7 +72,7 @@ export class ApiError extends Error {
 export interface ConsentScopes { mic: boolean; camera: boolean; recording: boolean }
 export interface SessionDetail {
   sessionId: string; configId: string | null; mode: Mode | null; persona: Persona | null;
-  role: string | null; lengthMinutes: number | null; questionCount: number; cursorIndex: number; phase: string;
+  role: string | null; language: string | null; lengthMinutes: number | null; questionCount: number; cursorIndex: number; phase: string;
   startedAt: string | null; // ISO time the interview began; null until first begin (drives resume countdown)
 }
 export interface TranscriptTurn { questionId: string; interviewerText: string; candidateText: string }

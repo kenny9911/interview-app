@@ -15,6 +15,7 @@ import {
 
 import { colors } from './src/theme';
 import { RootStackParamList } from './src/navigation';
+import { LocaleProvider, useLocale } from './src/i18n/LocaleProvider';
 
 import WelcomeScreen from './src/screens/WelcomeScreen';
 import SignInScreen from './src/screens/SignInScreen';
@@ -35,7 +36,7 @@ import DataPrivacyScreen from './src/screens/DataPrivacyScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-export default function App() {
+function AppShell() {
   const [loaded] = useFonts({
     BricolageGrotesque_700Bold,
     HankenGrotesk_400Regular,
@@ -44,8 +45,9 @@ export default function App() {
     HankenGrotesk_700Bold,
     HankenGrotesk_800ExtraBold,
   });
+  const { ready } = useLocale(); // i18n initialized (device/persisted locale resolved)
 
-  if (!loaded) {
+  if (!loaded || !ready) {
     return (
       <View style={{ flex: 1, backgroundColor: colors.bone, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator color={colors.persimmon} />
@@ -79,5 +81,15 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
+  );
+}
+
+export default function App() {
+  // LocaleProvider must wrap the tree so useLocale()/useThemeFonts() resolve and
+  // i18n is initialized before any screen renders.
+  return (
+    <LocaleProvider>
+      <AppShell />
+    </LocaleProvider>
   );
 }

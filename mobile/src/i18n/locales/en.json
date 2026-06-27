@@ -1,0 +1,48 @@
+{
+  "common": {
+    "back": "Back",
+    "gotIt": "Got it",
+    "comingSoon": "Coming soon"
+  },
+  "languagePicker": {
+    "title": "Language",
+    "subtitle": "Sets the app and your interview language."
+  },
+  "chooseMode": {
+    "title": "What do you\nwant to do?",
+    "continueWith": "Continue with {{mode}}",
+    "comingSoonTitle": "Coming soon",
+    "comingSoonBody": "These modes need an employer invite. Once an employer invites you, they'll show up here ready to go.",
+    "badges": { "popular": "POPULAR", "invite": "INVITE" },
+    "modes": {
+      "mock": { "title": "Mock interview", "sub": "A full practice round, scored like the real thing." },
+      "real": { "title": "Real interview", "sub": "Take a scheduled interview from an employer." },
+      "topic_practice": { "title": "Topic practice", "sub": "Drill a specific skill with instant coaching." },
+      "capability_assessment": { "title": "Capability assessment", "sub": "Get evaluated by your employer on real skills." },
+      "expert_interview": { "title": "Expert interview", "sub": "Interview an expert AI to extract know-how." }
+    }
+  },
+  "setup": {
+    "title": {
+      "mock": "Set up your mock",
+      "topic_practice": "Set up your topic practice",
+      "capability_assessment": "Set up your assessment",
+      "default": "Set up your interview"
+    },
+    "cameraReady": "Camera ready",
+    "role": "Role",
+    "rolePlaceholder": "Product Manager",
+    "style": "Interviewer style",
+    "styles": { "friendly": "Friendly", "balanced": "Balanced", "tough": "Tough" },
+    "interviewer": "Interviewer",
+    "personas": { "aria": "Hiring mgr", "sam": "Peer", "lena": "Director" },
+    "language": "Language",
+    "length": "Length",
+    "minutes": "minutes",
+    "topic": "Topic focus (optional)",
+    "topicPlaceholder": "e.g. metrics, leadership, system design",
+    "start": "Start interview",
+    "starting": "Building your interview…",
+    "error": "Something went wrong. Please try again."
+  }
+}

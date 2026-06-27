@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { ScreenScroll, Display, Card, IconCircle, PrimaryButton, BackButton } from '../components/ui';
 import { colors, fonts, radius } from '../theme';
+import { fontsFor } from '../theme.fonts';
+import { useLocale } from '../i18n/LocaleProvider';
+import { NATIVE_NAME } from '../i18n/resources';
+import { LanguagePicker } from '../components/LanguagePicker';
 import { useNav } from '../navigation';
 import { ChevronLeft, ChevronDown, Globe, Play, Briefcase, Bulb, BarChart, GradCap, Close } from '../icons';
 
@@ -58,6 +62,8 @@ export default function ChooseModeScreen() {
   const nav = useNav();
   const [selectedId, setSelectedId] = useState<ModeId>('mock');
   const [comingSoon, setComingSoon] = useState(false);
+  const { locale } = useLocale();
+  const [langOpen, setLangOpen] = useState(false);
 
   const selected = MODES.find((m) => m.id === selectedId)!;
 
@@ -82,11 +88,16 @@ export default function ChooseModeScreen() {
         <BackButton onPress={() => nav.navigate('Home')}>
           <ChevronLeft size={18} color={colors.ink} />
         </BackButton>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 7, backgroundColor: colors.white, borderWidth: 1, borderColor: colors.hairline, borderRadius: radius.pill, paddingVertical: 8, paddingHorizontal: 14 }}>
+        <Pressable
+          onPress={() => setLangOpen(true)}
+          accessibilityRole="button"
+          accessibilityLabel={NATIVE_NAME[locale]}
+          style={{ flexDirection: 'row', alignItems: 'center', gap: 7, backgroundColor: colors.white, borderWidth: 1, borderColor: colors.hairline, borderRadius: radius.pill, paddingVertical: 8, paddingHorizontal: 14 }}
+        >
           <Globe size={16} color={colors.persimmonD} />
-          <Text style={{ fontFamily: fonts.semibold, fontSize: 13.5, color: colors.ink }}>English</Text>
+          <Text style={{ fontFamily: fontsFor(locale).semibold, fontSize: 13.5, color: colors.ink }}>{NATIVE_NAME[locale]}</Text>
           <ChevronDown size={11} color={colors.ink} />
-        </View>
+        </Pressable>
       </View>
 
       {/* title */}
@@ -172,6 +183,8 @@ export default function ChooseModeScreen() {
           </View>
         </View>
       )}
+
+      <LanguagePicker visible={langOpen} onClose={() => setLangOpen(false)} />
     </ScreenScroll>
   );
 }

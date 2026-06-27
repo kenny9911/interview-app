@@ -15,10 +15,50 @@ export type Persona = z.infer<typeof Persona>;
 export const Style = z.enum(['friendly', 'balanced', 'tough']);
 export type Style = z.infer<typeof Style>;
 
-// Languages gated to what the stack serves end-to-end (D0).
-export const Language = z.enum(['en', 'es', 'zh']);
+// The canonical, script-explicit locale vocabulary that travels the whole stack
+// (mobile ↔ server ↔ agent). BCP-47 with script subtags so Simplified vs
+// Traditional is unambiguous; only the agent maps these to vendor codes
+// (Deepgram zh-CN/zh-TW, Cartesia/ElevenLabs zh/ja/ko). See docs/30-i18n.md.
+export const Language = z.enum(['en', 'zh-Hans', 'zh-Hant', 'ja', 'ko']);
 export type Language = z.infer<typeof Language>;
-export const SUPPORTED_LANGUAGES_P0: Language[] = ['en'];
+
+// Lenient input wrapper: migrate legacy/region/lowercase codes onto a canonical
+// value at read time (persisted rows + tolerant client input). An UNKNOWN code
+// passes through so the enum parse fails → 400 invalid_config (a client bug),
+// while a known-but-not-rolled-out code parses fine → 409 language_not_supported.
+export const LanguageInput = z.preprocess((v) => {
+  const s = String(v ?? 'en').trim().toLowerCase();
+  const map: Record<string, string> = {
+    en: 'en', ja: 'ja', ko: 'ko',
+    zh: 'zh-Hans', 'zh-cn': 'zh-Hans', 'zh-hans': 'zh-Hans', 'zh-sg': 'zh-Hans',
+    'zh-tw': 'zh-Hant', 'zh-hk': 'zh-Hant', 'zh-mo': 'zh-Hant', 'zh-hant': 'zh-Hant',
+    es: 'en', // dropped target → safe fallback; never 500 an old row
+  };
+  return map[s] ?? v;
+}, Language);
+
+// Rollout gate (D0): a language is accepted by the API only once its
+// STT/TTS/voice/prompt/integrity slice is green. Widen ONE entry at a time;
+// widening the enum above does NOT open the gate. (docs/30-i18n.md §10)
+export const SUPPORTED_LANGUAGES_P0: Language[] = ['en', 'zh-Hans'];
+
+/** Spoken language (drives ASR/TTS code, voice matrix, endpointing). Simplified
+ *  and Traditional are the same spoken Mandarin → both collapse to 'zh'. */
+export function spokenLang(l: Language): 'en' | 'zh' | 'ja' | 'ko' {
+  return l === 'zh-Hans' || l === 'zh-Hant' ? 'zh' : l;
+}
+
+/** The natural-language instruction that forces the model to conduct AND write
+ *  the whole interview in the locale (correct script for Chinese). */
+export function scriptInstruction(l: Language): string {
+  switch (l) {
+    case 'en': return 'Conduct the entire interview in English.';
+    case 'zh-Hans': return '请全程使用简体中文进行面试（提问、追问、点评、报告均使用简体中文，不要使用繁体字）。';
+    case 'zh-Hant': return '請全程使用繁體中文進行面試（提問、追問、點評、報告均使用繁體中文，不要使用簡體字）。';
+    case 'ja': return '面接全体を日本語で行ってください（質問・追加質問・講評・レポートすべて日本語で）。';
+    case 'ko': return '면접 전체를 한국어로 진행하세요(질문, 후속 질문, 피드백, 리포트 모두 한국어로).';
+  }
+}
 
 /* ---------- accounts (real password auth; D14) ---------- */
 export const User = z.object({
@@ -31,8 +71,21 @@ export type User = z.infer<typeof User>;
 
 export const Competency = z.enum(['communication', 'structure', 'depth', 'confidence']);
 export type Competency = z.infer<typeof Competency>;
-// Lenient variant for LLM output (tolerates casing/whitespace).
-export const CompetencyLenient = z.preprocess((v) => String(v ?? '').toLowerCase().trim(), Competency);
+// Lenient variant for LLM output: tolerate casing/whitespace, fold common
+// synonyms onto a canonical axis, and NEVER 500 on an out-of-vocab label —
+// fall back to 'depth' (the substance axis). Mirrors `band`'s .catch() below so
+// a stray model label (e.g. a topic name like "product_sense") can't sink an
+// entire plan / review / report.
+const COMPETENCY_ALIASES: Record<string, Competency> = {
+  communication: 'communication', clarity: 'communication', articulation: 'communication', conciseness: 'communication', listenability: 'communication',
+  structure: 'structure', structuring: 'structure', organization: 'structure', organisation: 'structure', framework: 'structure', problem_structuring: 'structure', logic: 'structure',
+  depth: 'depth', technical_depth: 'depth', rigor: 'depth', rigour: 'depth', expertise: 'depth', knowledge: 'depth', substance: 'depth', specificity: 'depth',
+  confidence: 'confidence', conviction: 'confidence', poise: 'confidence', ownership: 'confidence',
+};
+export const CompetencyLenient = z.preprocess((v) => {
+  const key = String(v ?? '').toLowerCase().trim().replace(/[\s-]+/g, '_');
+  return COMPETENCY_ALIASES[key] ?? key;
+}, Competency.catch('depth'));
 
 // Free-text field that tolerates the model returning an array of bullets.
 export const looseStr = z.preprocess(
@@ -48,7 +101,7 @@ export const InterviewConfig = z.object({
   role: z.string().min(1).max(120),
   persona: Persona,
   style: Style,
-  language: Language.default('en'),
+  language: LanguageInput.default('en'),
   lengthMinutes: z.number().int().min(5).max(60),
   topicFocus: z.string().max(200).optional(),
   jobDescription: z.string().max(8000).optional(),
@@ -132,7 +185,8 @@ export const AnswerScore = z.object({
 export type AnswerScore = z.infer<typeof AnswerScore>;
 
 export const PlanPatchOp = z.object({
-  op: z.enum(['insert_followup', 'raise_difficulty', 'lower_difficulty', 'skip', 'none']),
+  // never 500 on an unknown op — fall back to the safe no-op (same leniency as band/competency)
+  op: z.enum(['insert_followup', 'raise_difficulty', 'lower_difficulty', 'skip', 'none']).catch('none'),
   targetQuestionId: z.string(),
   payload: z.string().optional(),
 });

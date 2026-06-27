@@ -3,7 +3,7 @@
 import { randomUUID } from 'node:crypto';
 import {
   type InterviewConfig, type InterviewState, type QuestionPlan, type ReviewerResult,
-  type InterviewReport, type Turn, type ControlToken,
+  type InterviewReport, type Turn, type ControlToken, type Language,
   QuestionPlan as QuestionPlanSchema, ReviewerResult as ReviewerResultSchema,
   InterviewReport as InterviewReportSchema, ControlToken as ControlTokenSchema, bandFor,
 } from './domain.js';
@@ -14,8 +14,8 @@ import { verifyEvidence, stripAffect } from './scoring/integrity.js';
 
 /** Scrub affect/protected language from candidate-facing feedback; log when it
  *  fires (production canary for prompt regressions) and never surface empty text. */
-function cleanFeedback(text: string, fallback: string): string {
-  const r = stripAffect(text);
+function cleanFeedback(text: string, fallback: string, lang: Language = 'en'): string {
+  const r = stripAffect(text, lang);
   if (r.changed) console.warn('[viva] affect redaction fired on analyst feedback');
   return r.text || fallback;
 }
@@ -47,7 +47,7 @@ export async function interviewerTurn(
 ): Promise<InterviewerTurn> {
   const candidateAnswer = candidateAnswerRaw == null ? null : sanitizeCandidateText(candidateAnswerRaw);
   const system = interviewerSystem(config);
-  const user = interviewerTurnUser(state, candidateAnswer);
+  const user = interviewerTurnUser(state, candidateAnswer, config.language);
   const raw = await llm.text({ role: 'interviewer', system, user, maxTokens: 220, temperature: 0.7 });
 
   const spokenText = stripControlToken(raw);
@@ -172,10 +172,10 @@ export async function reviewAnswer(
     return {
       ...sc,
       evidenceQuote: ok ? sc.evidenceQuote : '',
-      rationale: stripAffect((ok ? '' : '[unverified] ') + sc.rationale).text,
+      rationale: stripAffect((ok ? '' : '[unverified] ') + sc.rationale, config.language).text,
     };
   });
-  return { ...result, scores, note: stripAffect(result.note).text, questionId: turn.questionId, basedOnVersion: state.version };
+  return { ...result, scores, note: stripAffect(result.note, config.language).text, questionId: turn.questionId, basedOnVersion: state.version };
 }
 
 /**
@@ -210,12 +210,12 @@ export async function analyzeInterview(
   const candidateAll = transcript.map((t) => t.a).join('\n');
   const competencyScores = report.competencyScores.map((cs) => ({
     ...cs,
-    summary: stripAffect(cs.summary).text,
+    summary: stripAffect(cs.summary, config.language).text,
     evidence: cs.evidence.filter((e) => verifyEvidence(e, candidateAll)),
   }));
   const perQuestion = report.perQuestion.map((pq) => ({
     ...pq,
-    feedback: stripAffect(pq.feedback).text,
+    feedback: stripAffect(pq.feedback, config.language).text,
     evidenceQuote: verifyEvidence(pq.evidenceQuote, candidateAll) ? pq.evidenceQuote : '',
   }));
   // Overall is a transparent aggregate of the competencies (source of truth) so it
@@ -230,7 +230,7 @@ export async function analyzeInterview(
     band: bandFor(overallScore),
     competencyScores,
     perQuestion,
-    stoodOut: cleanFeedback(report.stoodOut, 'You showed clear strengths in this interview.'),
-    workOn: cleanFeedback(report.workOn, 'Keep practicing to sharpen your answers.'),
+    stoodOut: cleanFeedback(report.stoodOut, 'You showed clear strengths in this interview.', config.language),
+    workOn: cleanFeedback(report.workOn, 'Keep practicing to sharpen your answers.', config.language),
   };
 }

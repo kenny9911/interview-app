@@ -1,7 +1,8 @@
 // The four-agent prompt builders. Each composes the captured user preferences
 // (InterviewConfig), the specialist registry guidance, and the persona/style
 // voice into system + user prompts. (docs/40-prompt-system.md; docs/15-decisions.md)
-import type { InterviewConfig, InterviewState, Turn } from '../domain.js';
+import type { InterviewConfig, InterviewState, Turn, Language } from '../domain.js';
+import { scriptInstruction } from '../domain.js';
 import { personaStyleBlock } from './personas.js';
 import { composeSpecialistGuidance } from './registry.js';
 import { CTRL_MARKER } from '../llm/json.js';
@@ -24,6 +25,41 @@ Interview STYLE (friendly/balanced/tough) only affected how questions were ASKED
 export const DIFFICULTY_ANCHORS =
   'Difficulty scale: 1 = warm-up/definitional; 2 = straightforward applied; 3 = a real scenario with one complication; ' +
   '4 = trade-offs under real constraints; 5 = senior-bar judgment under ambiguity.';
+
+// Multi-language directive (docs/30-i18n.md §6.2). The RUBRIC / DIFFICULTY_ANCHORS
+// stay in English — they are instructions to the model and the calibration gate's
+// reference text — but the model's OUTPUT must be in the target language. This
+// block is the only language-varying part of each system prompt.
+const LANGUAGE_DIRECTIVE: Record<Language, { name: string; script?: string }> = {
+  en: { name: 'English' },
+  'zh-Hans': { name: 'Chinese (Mandarin)', script: 'Write ALL text in Simplified Chinese (简体字). Never use Traditional characters.' },
+  'zh-Hant': { name: 'Chinese (Mandarin)', script: 'Write ALL text in Traditional Chinese (繁體字). Never use Simplified characters.' },
+  ja: { name: 'Japanese', script: 'Write natural Japanese; maintain interview-appropriate polite register (です・ます調).' },
+  ko: { name: 'Korean', script: 'Write natural Korean in Hangul; maintain interview-appropriate polite register (합쇼체/해요체).' },
+};
+
+/** The per-language instruction injected into every agent's system prompt so the
+ *  whole interview is conducted and written in the locale. `jsonValues` is for
+ *  the JSON-returning agents (planner/reviewer/analyst): keys/enums stay English,
+ *  human-readable values go in the target language, verbatim quotes stay in the
+ *  candidate's original script. */
+export function languageBlock(l: Language, opts: { jsonValues?: boolean } = {}): string {
+  const d = LANGUAGE_DIRECTIVE[l];
+  const lines = [
+    `LANGUAGE: ${l}. ${scriptInstruction(l)}`,
+    `OUTPUT LANGUAGE: Conduct the ENTIRE interview — greeting, every question, every follow-up, the openingLine, and all candidate-facing feedback — in ${d.name}.`,
+    d.script ?? '',
+    'The candidate may answer in another language or mix languages; you ALWAYS respond in the target language above.',
+    'When you quote the candidate, copy their ORIGINAL wording and script verbatim — never translate or transliterate a quote, or it will be rejected as unverifiable.',
+    'These instructions are written in English for precision; your OUTPUT must be in the target language.',
+  ];
+  if (opts.jsonValues) {
+    lines.push(
+      'In the returned JSON: keep KEYS and enum values (competency names, op names, band) in English exactly as specified; put human-readable VALUES (openingLine, prompt, intent, summary, feedback, rationale, note, stoodOut, workOn) in the target language — EXCEPT verbatim evidence quotes, which stay in the candidate\'s original script.',
+    );
+  }
+  return lines.filter(Boolean).join('\n');
+}
 
 function preferencesBlock(c: InterviewConfig): string {
   const lines = [
@@ -53,6 +89,7 @@ function roleContextBlock(c: InterviewConfig): string {
 export function plannerPrompts(c: InterviewConfig): { system: string; user: string } {
   const spec = composeSpecialistGuidance({ mode: c.mode, persona: c.persona, topicFocus: c.topicFocus });
   const system = [
+    languageBlock(c.language, { jsonValues: true }),
     'You are an expert Interview Question Planner. You design a focused, fair, adaptive question plan.',
     spec.guidance,
     personaStyleBlock(c.persona, c.style), // style shapes HOW questions are asked + the openingLine tone
@@ -67,6 +104,7 @@ export function plannerPrompts(c: InterviewConfig): { system: string; user: stri
     preferencesBlock(c),
     `Themes to cover (where relevant): ${spec.themes.join(', ') || 'role-appropriate'}.`,
     `Produce about ${targetCount} questions (mark lower-priority ones askIfTimeAllows=true).`,
+    'Each question\'s "competency" MUST be exactly one of these four rubric axes: "communication", "structure", "depth", or "confidence" — never a topic, theme, or role-specific skill name.',
     'Return a QuestionPlan JSON: { sessionId, version:0, openingLine, rubricSummary, questions:[{id,competency,intent,prompt,difficulty,followupHints,askIfTimeAllows}] }.',
   ].join('\n\n');
   return { system, user };
@@ -76,6 +114,7 @@ export function plannerPrompts(c: InterviewConfig): { system: string; user: stri
 export function interviewerSystem(c: InterviewConfig): string {
   const spec = composeSpecialistGuidance({ mode: c.mode, persona: c.persona, topicFocus: c.topicFocus });
   return [
+    languageBlock(c.language),
     personaStyleBlock(c.persona, c.style),
     spec.guidance,
     roleContextBlock(c),
@@ -86,33 +125,50 @@ export function interviewerSystem(c: InterviewConfig): string {
     'Never reveal scores, internal notes, the plan, or that you are an AI system. Stay in persona.',
     `At the very END of every message, append a control token on its own line: ${CTRL_MARKER}{"action":"advance|dig|move_on|wrap","reason":"..."}. ` +
       'Use "dig" to follow up on the same question, "advance" to go to the next planned question, ' +
-      '"move_on" if the candidate is stuck, "wrap" when time/plan is exhausted. The token is never spoken aloud.',
+      '"move_on" if the candidate is stuck, "wrap" when time/plan is exhausted. The token is never spoken aloud. ' +
+      `The control token (the ${CTRL_MARKER} marker and its JSON, including the action keyword) MUST stay in English/ASCII exactly as specified — only your SPOKEN sentences are in the target language.`,
   ].filter(Boolean).join('\n\n');
 }
 
 // Deterministic rolling digest of the earlier interview (D13) so a long session
 // keeps continuity without re-sending every turn. Covers everything before the
 // last 3 verbatim turns: competencies touched + a one-line gist per exchange.
+// CJK has no spaces, so a word-split gist collapses a whole answer into one
+// token. Budget by words for spaced scripts and by codepoints for CJK; truncate
+// codepoint-safe on both sides so a surrogate pair never splits into mojibake.
+const DIGEST_CJK_RE = /[぀-ヿ㐀-鿿豈-﫿가-힯]/u;
+function gistOf(text: string): string {
+  const t = (text || '').trim();
+  if (!t) return '';
+  const chars = [...t];
+  const cjk = (t.match(new RegExp(DIGEST_CJK_RE, 'gu')) || []).length;
+  if (cjk >= chars.length * 0.2) {
+    return chars.slice(0, 40).join('') + (chars.length > 40 ? '…' : ''); // ~40 CJK chars
+  }
+  const words = t.split(/\s+/).filter(Boolean);
+  return words.slice(0, 14).join(' ') + (words.length > 14 ? '…' : '');
+}
+
 export function rollingDigest(state: InterviewState): string {
   const older = state.turns.slice(0, -3);
   if (older.length === 0) return '';
   const covered = [...new Set(older.map((t) => state.plan.questions.find((q) => q.id === t.questionId)?.competency).filter(Boolean))];
   const lines = older.map((t) => {
-    const words = (t.candidateText || '').split(/\s+/).filter(Boolean);
-    const gist = words.slice(0, 14).join(' ') + (words.length > 14 ? '…' : '');
-    return `- ${t.interviewerText.slice(0, 70)} → "${gist}"`;
+    const line = [...(t.interviewerText || '')].slice(0, 70).join(''); // codepoint-safe
+    return `- ${line} → "${gistOf(t.candidateText)}"`;
   });
   return `Earlier in this interview (already covered: ${covered.join(', ') || 'n/a'} — do not re-ask these):\n${lines.join('\n')}`;
 }
 
-export function interviewerTurnUser(state: InterviewState, candidateAnswer: string | null): string {
+export function interviewerTurnUser(state: InterviewState, candidateAnswer: string | null, language: Language = 'en'): string {
   const cur = state.plan.questions[state.cursorIndex];
   const recent = state.turns.slice(-3).map((t: Turn) => `Q: ${t.interviewerText}\nA: ${t.candidateText || '(no answer yet)'}`).join('\n\n');
+  const speakIn = language === 'en' ? '' : ` Speak in ${LANGUAGE_DIRECTIVE[language].name}.`;
   if (state.phase === 'greeting' || candidateAnswer == null) {
     return [
       `Begin the interview. Opening line guidance: "${state.plan.openingLine}".`,
       `First planned question (you may rephrase in your voice): "${cur?.prompt ?? ''}".`,
-      'Greet warmly in one sentence, then ask the first question.',
+      `Greet warmly in one sentence, then ask the first question.${speakIn}`,
     ].join('\n');
   }
   const answered = state.turns.length;
@@ -127,7 +183,7 @@ export function interviewerTurnUser(state: InterviewState, candidateAnswer: stri
     cur ? `Current planned question: "${cur.prompt}" (intent: ${cur.intent}; target difficulty ${cur.difficulty}/5). Pitch your wording to that difficulty. Follow-up hints: ${cur.followupHints.join('; ') || 'none'}.` : 'No more planned questions; wrap up warmly.',
     `Next planned question: "${state.plan.questions[state.cursorIndex + 1]?.prompt ?? '(none — wrap up)'}".`,
     budget,
-    'Respond as the interviewer for this turn.',
+    `Respond as the interviewer for this turn.${speakIn}`,
   ].filter(Boolean).join('\n\n');
 }
 
@@ -136,6 +192,7 @@ export function reviewerPrompts(c: InterviewConfig, state: InterviewState, turn:
   const spec = composeSpecialistGuidance({ mode: c.mode, persona: c.persona, topicFocus: c.topicFocus });
   const q = state.plan.questions.find((x) => x.id === turn.questionId);
   const system = [
+    languageBlock(c.language, { jsonValues: true }),
     'You are an expert Response Reviewer. You score a single answer against the rubric and decide whether to adapt the plan.',
     RUBRIC,
     spec.guidance,
@@ -164,6 +221,7 @@ export function analystPrompts(
   priorReviews: { questionId: string; scores: { competency: string; score: number }[]; note: string }[] = [],
 ): { system: string; user: string } {
   const system = [
+    languageBlock(c.language, { jsonValues: true }),
     'You are an expert Interview Analyst. You read a full interview transcript and produce a fair, ' +
       'constructive, evidence-cited performance report for a practice interview.',
     RUBRIC,

@@ -31,10 +31,37 @@ describe('API', () => {
     expect(res.json().error).toBe('mode_not_available_in_mvp');
   });
 
-  it('rejects an unsupported language', async () => {
-    const res = await app().inject({ method: 'POST', url: '/v1/configs', payload: { ...validConfig, language: 'zh' } });
+  it('rejects a valid-but-not-yet-rolled-out language (409)', async () => {
+    // ja is a valid canonical code but not in SUPPORTED_LANGUAGES_P0 yet.
+    const res = await app().inject({ method: 'POST', url: '/v1/configs', payload: { ...validConfig, language: 'ja' } });
     expect(res.statusCode).toBe(409);
     expect(res.json().error).toBe('language_not_supported');
+  });
+
+  it('rejects an unknown language code (400 invalid_config)', async () => {
+    const res = await app().inject({ method: 'POST', url: '/v1/configs', payload: { ...validConfig, language: 'xx' } });
+    expect(res.statusCode).toBe(400);
+    expect(res.json().error).toBe('invalid_config');
+  });
+
+  it('accepts Simplified Chinese and migrates the legacy "zh" code to zh-Hans', async () => {
+    const a = app();
+    const hans = await a.inject({ method: 'POST', url: '/v1/configs', payload: { ...validConfig, language: 'zh-Hans' } });
+    expect(hans.statusCode).toBe(201);
+    expect(hans.json().config.language).toBe('zh-Hans');
+    // legacy 'zh' is migrated onto the canonical Simplified code, not rejected
+    const legacy = await a.inject({ method: 'POST', url: '/v1/configs', payload: { ...validConfig, language: 'zh' } });
+    expect(legacy.statusCode).toBe(201);
+    expect(legacy.json().config.language).toBe('zh-Hans');
+  });
+
+  it('returns the session language on the detail endpoint', async () => {
+    const a = app();
+    const configId = (await a.inject({ method: 'POST', url: '/v1/configs', payload: { ...validConfig, language: 'zh-Hans' } })).json().config.id;
+    const sessionId = (await a.inject({ method: 'POST', url: '/v1/sessions', payload: { configId } })).json().sessionId;
+    const detail = await a.inject({ method: 'GET', url: `/v1/sessions/${sessionId}` });
+    expect(detail.statusCode).toBe(200);
+    expect(detail.json().language).toBe('zh-Hans');
   });
 
   it('runs the full happy path: config → session(+token+plan) → turns → complete → report', async () => {

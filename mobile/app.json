@@ -10,16 +10,30 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.viva.interview",
+      "bundleIdentifier": "com.kennychien.viva",
       "infoPlist": {
         "NSMicrophoneUsageDescription": "viva uses your microphone so the AI interviewer can hear and respond to your answers.",
         "NSCameraUsageDescription": "viva uses your camera so you can see yourself during the interview (optional — you can keep it off).",
-        "UIBackgroundModes": ["audio", "voip"]
+        "UIBackgroundModes": [
+          "audio",
+          "voip"
+        ],
+        "CFBundleLocalizations": [
+          "en",
+          "zh-Hans",
+          "zh-Hant",
+          "ja",
+          "ko"
+        ]
       }
     },
     "android": {
       "package": "com.viva.interview",
-      "permissions": ["RECORD_AUDIO", "CAMERA", "MODIFY_AUDIO_SETTINGS"],
+      "permissions": [
+        "RECORD_AUDIO",
+        "CAMERA",
+        "MODIFY_AUDIO_SETTINGS"
+      ],
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -35,9 +49,14 @@
       "expo-font",
       [
         "@livekit/react-native-expo-plugin",
-        { "android": { "audioType": "communication" } }
+        {
+          "android": {
+            "audioType": "communication"
+          }
+        }
       ],
-      "@config-plugins/react-native-webrtc"
+      "@config-plugins/react-native-webrtc",
+      "expo-localization"
     ]
   }
 }
