@@ -6,6 +6,7 @@ import * as silero from '@livekit/agents-plugin-silero';
 import * as deepgram from '@livekit/agents-plugin-deepgram';
 import * as cartesia from '@livekit/agents-plugin-cartesia';
 import { env, assertLiveCreds } from './env.js';
+import { vadTuning } from './voiceConfig.js';
 
 async function main() {
   assertLiveCreds();
@@ -16,8 +17,14 @@ async function main() {
   const token = await at.toJwt();
   console.log(`✓ minted LiveKit token (${token.length} chars) for ${env.LIVEKIT_URL}`);
 
-  const vad = await silero.VAD.load();
-  console.log('✓ Silero VAD loaded', vad ? '' : '');
+  const t = vadTuning();
+  const vad = await silero.VAD.load({
+    minSpeechDuration: t.minSpeechDuration,
+    minSilenceDuration: t.minSilenceDuration,
+    prefixPaddingDuration: t.prefixPaddingDuration,
+    activationThreshold: t.activationThreshold,
+  });
+  console.log('✓ Silero VAD loaded (tuned)', vad ? JSON.stringify(t) : '');
 
   // constructing the plugins validates the wiring (keys are read from env)
   new deepgram.STT({ model: env.STT_MODEL as NonNullable<ConstructorParameters<typeof deepgram.STT>[0]>['model'] });
