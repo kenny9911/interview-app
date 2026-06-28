@@ -104,14 +104,14 @@ export function cartesiaVoiceFor(persona: Persona, l: Lang, e: NodeJS.ProcessEnv
 }
 
 // Korean is NOT Cartesia (it has no Korean) — it uses ElevenLabs. These are
-// native-Korean ElevenLabs Voice-Library voices chosen as provisional defaults;
-// env-overridable per persona, and meant to be vetted/swapped by a Korean speaker
-// (docs/30-i18n.md §4.2). aria=Miso Choi (calm Seoul, F), sam=Hojin Lim (M),
-// lena=Jeong-Ah (warm, F).
+// real, native-Korean professional voices, each validated to synthesize Korean
+// with eleven_flash_v2_5 (docs/30-i18n.md §4.2). Env-overridable per persona;
+// meant to be vetted/swapped by a Korean speaker. aria=Jennie (F), sam=Hyun Bin
+// (M), lena=salang (F).
 const ELEVENLABS_KO_VOICE: Record<Persona, string> = {
-  aria: 'tIXHSlSWOafJawXSV1g4',
-  sam: 'fHzGR8qcnsDR2uaj9r16',
-  lena: 'UvkXHIJzOBYWOI51BDKp',
+  aria: 'z6Kj0hecH20CdetSElRT',
+  sam: 's07IwTCOrCDCaETjUVjx',
+  lena: 'mYk0rAapHek2oTw18z8x',
 };
 
 /** ElevenLabs voice id for a persona speaking Korean (env override → native default). */

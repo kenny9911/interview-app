@@ -73,10 +73,11 @@ describe('cartesiaVoiceFor — no awkward-foreigner voice', () => {
   });
 
   it('Korean uses native ElevenLabs voices (env override → baked native default)', () => {
-    // Defaults are real native-Korean Voice-Library ids — never empty, never an EN voice.
-    expect(elevenlabsVoiceForKo('aria', NO_ENV)).toBe('tIXHSlSWOafJawXSV1g4');
-    expect(elevenlabsVoiceForKo('sam', NO_ENV)).toBe('fHzGR8qcnsDR2uaj9r16');
-    expect(elevenlabsVoiceForKo('lena', NO_ENV)).toBe('UvkXHIJzOBYWOI51BDKp');
+    // Defaults are real native-Korean voice ids (validated against ElevenLabs) —
+    // never empty, never an EN voice.
+    expect(elevenlabsVoiceForKo('aria', NO_ENV)).toBe('z6Kj0hecH20CdetSElRT');
+    expect(elevenlabsVoiceForKo('sam', NO_ENV)).toBe('s07IwTCOrCDCaETjUVjx');
+    expect(elevenlabsVoiceForKo('lena', NO_ENV)).toBe('mYk0rAapHek2oTw18z8x');
     expect(elevenlabsVoiceForKo('aria', { ELEVENLABS_VOICE_ARIA_KO: 'custom-ko' })).toBe('custom-ko');
   });
 });
